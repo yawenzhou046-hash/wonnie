@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark" data-inspector-id="html:901e7b20:0"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZHOU YAWEN // TACTICAL DESKTOP OS v3.8</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com">
+</script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#050806',
+                            panel: '#0c120e',
+                            header: '#141e18',
+                            panelBorder: '#1c3022',
+                            green: '#00ff66',
+                            greenDim: '#00cc52',
+                            greenDark: '#072410',
+                            neon: '#34d399',
+                            muted: '#436b53',
+                            text: '#d1fae5',
+                            dimText: '#76a887'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Share Tech Mono', 'Consolas', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+</script>
+    
+    <!-- Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;family=Inter:wght@300;400;600;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050806;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1c3022;
+            border: 1px solid #00ff66;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ff66;
+        }
+
+        /* Tactical Clip Paths */
+        .clip-tech-sm {
+            clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+        }
+        .clip-tech-lg {
+            clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+        }
+
+        /* Background Tactical Grid */
+        .bg-tech-grid {
+            background-size: 32px 32px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 255, 102, 0.035) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 255, 102, 0.035) 1px, transparent 1px);
+        }
+
+        /* CRT Scanline Shader Overlay */
+        .scanline-active::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 255, 102, 0.03) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.01));
+            z-index: 999;
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        /* Glow Effects */
+        .text-glow {
+            text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+        }
+
+        /* Draggable Window active state */
+        .window-active {
+            z-index: 40 !important;
+            border-color: #00ff66 !important;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.25) !important;
+        }
+
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+    
+        /* Pixel Retro Green Cursor */
+        * {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Crect x='2' y='2' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='6' y='2' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='10' y='2' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='2' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='10' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='14' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='2' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='6' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='10' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='14' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='18' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='6' y='14' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='10' y='14' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='14' y='14' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='10' y='18' width='4' height='4' fill='%2300ff66'/%3E%3C/svg%3E") 4 4, auto;
+        }
+        a, button, [onclick], .cursor-pointer, input[type="file"], input[type="range"] {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Crect x='2' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='6' y='2' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='10' y='2' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='14' y='2' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='18' y='2' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='2' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='10' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='14' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='18' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='2' y='14' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='6' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='10' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='14' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='18' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='2' y='18' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='6' y='14' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='10' y='14' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='14' y='14' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='18' y='14' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='6' y='18' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='10' y='18' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='14' y='18' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='18' y='18' width='4' height='4' fill='%2300ff66'/%3E%3C/svg%3E") 8 8, pointer;
+        }
+        textarea, input[type="text"], input[type="password"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="url"] {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Crect x='10' y='2' width='4' height='20' fill='%2300ff66'/%3E%3Crect x='6' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='14' y='6' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='2' y='10' width='4' height='4' fill='%2300ff66'/%3E%3Crect x='18' y='10' width='4' height='4' fill='%2300ff66'/%3E%3C/svg%3E") 12 12, text;
+        }
+</style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, system-ui, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:Share Tech Mono, Consolas, Courier New, monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.inset-x-0{left:0px;right:0px}.bottom-0{bottom:0px}.bottom-10{bottom:2.5rem}.bottom-12{bottom:3rem}.bottom-16{bottom:4rem}.bottom-6{bottom:1.5rem}.left-0{left:0px}.left-1\/2{left:50%}.left-10{left:2.5rem}.left-2{left:0.5rem}.left-20{left:5rem}.left-4{left:1rem}.left-6{left:1.5rem}.right-0{right:0px}.right-10{right:2.5rem}.right-12{right:3rem}.right-6{right:1.5rem}.top-0{top:0px}.top-1\/2{top:50%}.top-14{top:3.5rem}.top-16{top:4rem}.top-2{top:0.5rem}.top-20{top:5rem}.top-24{top:6rem}.top-6{top:1.5rem}.bottom-3{bottom:0.75rem}.left-3{left:0.75rem}.z-0{z-index:0}.z-10{z-index:10}.z-20{z-index:20}.z-30{z-index:30}.z-50{z-index:50}.z-\[1000\]{z-index:1000}.z-\[300\]{z-index:300}.z-\[400\]{z-index:400}.mx-auto{margin-left:auto;margin-right:auto}.my-1{margin-top:0.25rem;margin-bottom:0.25rem}.my-3{margin-top:0.75rem;margin-bottom:0.75rem}.mb-1{margin-bottom:0.25rem}.mb-12{margin-bottom:3rem}.mb-16{margin-bottom:4rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mr-1{margin-right:0.25rem}.mr-1\.5{margin-right:0.375rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.line-clamp-2{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}.inline-block{display:inline-block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.aspect-\[16\/9\]{aspect-ratio:16/9}.aspect-video{aspect-ratio:16 / 9}.aspect-\[4\/3\]{aspect-ratio:4/3}.h-1{height:0.25rem}.h-10{height:2.5rem}.h-12{height:3rem}.h-2\.5{height:0.625rem}.h-28{height:7rem}.h-3{height:0.75rem}.h-3\.5{height:0.875rem}.h-8{height:2rem}.h-\[320px\]{height:320px}.h-auto{height:auto}.h-full{height:100%}.h-screen{height:100vh}.max-h-40{max-height:10rem}.max-h-\[64vh\]{max-height:64vh}.max-h-\[68vh\]{max-height:68vh}.max-h-\[82vh\]{max-height:82vh}.max-h-\[85vh\]{max-height:85vh}.w-10{width:2.5rem}.w-12{width:3rem}.w-16{width:4rem}.w-2\.5{width:0.625rem}.w-24{width:6rem}.w-28{width:7rem}.w-3\.5{width:0.875rem}.w-\[1px\]{width:1px}.w-\[88vw\]{width:88vw}.w-\[90vw\]{width:90vw}.w-\[92vw\]{width:92vw}.w-\[94vw\]{width:94vw}.w-full{width:100%}.w-screen{width:100vw}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}.max-w-7xl{max-width:80rem}.max-w-\[90vw\]{max-width:90vw}.max-w-full{max-width:100%}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}@keyframes spin{to{transform:rotate(360deg)}}.animate-spin{animation:spin 1s linear infinite}.cursor-crosshair{cursor:crosshair}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.select-all{-webkit-user-select:all;user-select:all}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-full{border-radius:9999px}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-l{border-left-width:1px}.border-t{border-top-width:1px}.border-cyber-green{--tw-border-opacity:1;border-color:rgb(0 255 102 / var(--tw-border-opacity, 1))}.border-cyber-green\/40{border-color:rgb(0 255 102 / 0.4)}.border-cyber-green\/50{border-color:rgb(0 255 102 / 0.5)}.border-cyber-panelBorder{--tw-border-opacity:1;border-color:rgb(28 48 34 / var(--tw-border-opacity, 1))}.border-cyber-panelBorder\/40{border-color:rgb(28 48 34 / 0.4)}.border-transparent{border-color:transparent}.border-cyber-panelBorder\/60{border-color:rgb(28 48 34 / 0.6)}.border-white\/40{border-color:rgb(255 255 255 / 0.4)}.border-cyber-panelBorder\/50{border-color:rgb(28 48 34 / 0.5)}.bg-\[\#050806\]{--tw-bg-opacity:1;background-color:rgb(5 8 6 / var(--tw-bg-opacity, 1))}.bg-\[\#050806\]\/90{background-color:rgb(5 8 6 / 0.9)}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/40{background-color:rgb(0 0 0 / 0.4)}.bg-black\/50{background-color:rgb(0 0 0 / 0.5)}.bg-black\/60{background-color:rgb(0 0 0 / 0.6)}.bg-black\/75{background-color:rgb(0 0 0 / 0.75)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-black\/95{background-color:rgb(0 0 0 / 0.95)}.bg-cyber-bg{--tw-bg-opacity:1;background-color:rgb(5 8 6 / var(--tw-bg-opacity, 1))}.bg-cyber-green{--tw-bg-opacity:1;background-color:rgb(0 255 102 / var(--tw-bg-opacity, 1))}.bg-cyber-green\/15{background-color:rgb(0 255 102 / 0.15)}.bg-cyber-header{--tw-bg-opacity:1;background-color:rgb(20 30 24 / var(--tw-bg-opacity, 1))}.bg-cyber-header\/90{background-color:rgb(20 30 24 / 0.9)}.bg-cyber-panel{--tw-bg-opacity:1;background-color:rgb(12 18 14 / var(--tw-bg-opacity, 1))}.bg-cyber-panelBorder{--tw-bg-opacity:1;background-color:rgb(28 48 34 / var(--tw-bg-opacity, 1))}.bg-red-500\/80{background-color:rgb(239 68 68 / 0.8)}.bg-transparent{background-color:transparent}.bg-yellow-500\/80{background-color:rgb(234 179 8 / 0.8)}.bg-black\/0{background-color:rgb(0 0 0 / 0)}.bg-cyber-green\/20{background-color:rgb(0 255 102 / 0.2)}.bg-gradient-to-t{background-image:linear-gradient(to top, var(--tw-gradient-stops))}.from-black\/40{--tw-gradient-from:rgb(0 0 0 / 0.4) var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 0 0 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.object-top{object-position:top}.p-1{padding:0.25rem}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pb-10{padding-bottom:2.5rem}.pb-4{padding-bottom:1rem}.pl-1{padding-left:0.25rem}.pl-2{padding-left:0.5rem}.pr-1{padding-right:0.25rem}.pt-12{padding-top:3rem}.pt-2{padding-top:0.5rem}.pt-8{padding-top:2rem}.pr-2{padding-right:0.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:Share Tech Mono, Consolas, Courier New, monospace}.font-sans{font-family:Inter, system-ui, sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[8px\]{font-size:8px}.text-\[9px\]{font-size:9px}.text-base{font-size:1rem;line-height:1.5rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-\[1\.1\]{line-height:1.1}.leading-relaxed{line-height:1.625}.tracking-\[0\.2em\]{letter-spacing:0.2em}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-cyber-dimText{--tw-text-opacity:1;color:rgb(118 168 135 / var(--tw-text-opacity, 1))}.text-cyber-green{--tw-text-opacity:1;color:rgb(0 255 102 / var(--tw-text-opacity, 1))}.text-cyber-muted{--tw-text-opacity:1;color:rgb(67 107 83 / var(--tw-text-opacity, 1))}.text-cyber-panelBorder{--tw-text-opacity:1;color:rgb(28 48 34 / var(--tw-text-opacity, 1))}.text-cyber-text{--tw-text-opacity:1;color:rgb(209 250 229 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/50{color:rgb(255 255 255 / 0.5)}.text-white\/60{color:rgb(255 255 255 / 0.6)}.text-white\/70{color:rgb(255 255 255 / 0.7)}.text-white\/90{color:rgb(255 255 255 / 0.9)}.accent-cyber-green{accent-color:#00ff66}.opacity-0{opacity:0}.opacity-30{opacity:0.3}.opacity-40{opacity:0.4}.opacity-80{opacity:0.8}.opacity-90{opacity:0.9}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-shadow{transition-property:box-shadow;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.duration-700{transition-duration:700ms}.selection\:bg-cyber-green *::selection{--tw-bg-opacity:1;background-color:rgb(0 255 102 / var(--tw-bg-opacity, 1))}.selection\:text-black *::selection{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.selection\:bg-cyber-green::selection{--tw-bg-opacity:1;background-color:rgb(0 255 102 / var(--tw-bg-opacity, 1))}.selection\:text-black::selection{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:border-cyber-green:hover{--tw-border-opacity:1;border-color:rgb(0 255 102 / var(--tw-border-opacity, 1))}.hover\:border-cyber-green\/40:hover{border-color:rgb(0 255 102 / 0.4)}.hover\:border-cyber-green\/50:hover{border-color:rgb(0 255 102 / 0.5)}.hover\:bg-cyber-green:hover{--tw-bg-opacity:1;background-color:rgb(0 255 102 / var(--tw-bg-opacity, 1))}.hover\:bg-cyber-green\/10:hover{background-color:rgb(0 255 102 / 0.1)}.hover\:bg-cyber-panelBorder:hover{--tw-bg-opacity:1;background-color:rgb(28 48 34 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-300:hover{--tw-bg-opacity:1;background-color:rgb(110 231 183 / var(--tw-bg-opacity, 1))}.hover\:bg-red-400:hover{--tw-bg-opacity:1;background-color:rgb(248 113 113 / var(--tw-bg-opacity, 1))}.hover\:bg-yellow-400:hover{--tw-bg-opacity:1;background-color:rgb(250 204 21 / var(--tw-bg-opacity, 1))}.hover\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:text-cyber-green:hover{--tw-text-opacity:1;color:rgb(0 255 102 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:opacity-100:hover{opacity:1}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:-translate-x-1{--tw-translate-x:-0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-110{--tw-scale-x:1.1;--tw-scale-y:1.1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-\[1\.02\]{--tw-scale-x:1.02;--tw-scale-y:1.02;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:border-cyber-green{--tw-border-opacity:1;border-color:rgb(0 255 102 / var(--tw-border-opacity, 1))}.group:hover .group-hover\:bg-black\/30{background-color:rgb(0 0 0 / 0.3)}.group:hover .group-hover\:text-cyber-green{--tw-text-opacity:1;color:rgb(0 255 102 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:left-28{left:7rem}.sm\:left-\[320px\]{left:320px}.sm\:mb-20{margin-bottom:5rem}.sm\:mb-24{margin-bottom:6rem}.sm\:aspect-\[21\/9\]{aspect-ratio:21/9}.sm\:w-\[420px\]{width:420px}.sm\:w-\[580px\]{width:580px}.sm\:w-\[720px\]{width:720px}.sm\:grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:gap-6{gap:1.5rem}.sm\:px-8{padding-left:2rem;padding-right:2rem}.sm\:py-16{padding-top:4rem;padding-bottom:4rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:block{display:block}.md\:flex{display:flex}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:block{display:block}.lg\:flex{display:flex}.lg\:w-\[900px\]{width:900px}.lg\:text-6xl{font-size:3.75rem;line-height:1}}</style></head>
+
+<body class="bg-cyber-bg text-cyber-text font-mono selection:bg-cyber-green selection:text-black h-screen w-screen overflow-hidden relative scanline-active" id="body-tag" data-inspector-id="html:901e7b20:1" style="">
+
+    <!-- Interactive Background Canvas -->
+    <canvas id="canvas-bg" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 opacity-30" data-inspector-id="html:901e7b20:2" width="1027" height="763"></canvas>
+
+    <!-- ZHOU YAWEN OS Boot Sequence Overlay -->
+    <div id="boot-screen" class="fixed inset-0 z-[1000] bg-black text-cyber-green p-6 flex flex-col justify-between font-mono text-xs sm:text-sm" data-inspector-id="html:901e7b20:3" style="opacity: 0; transition: opacity 0.4s; display: none;">
+        <div class="space-y-2 max-w-3xl" data-inspector-id="html:901e7b20:4">
+            <div class="text-white font-extrabold text-base tracking-widest flex items-center gap-2" data-inspector-id="html:901e7b20:5">
+                <i class="fa-solid fa-terminal text-cyber-green" data-inspector-id="html:901e7b20:6"></i> ZHOU YAWEN PORTFOLIO OS INITIALIZATION
+            </div>
+            <div class="text-cyber-muted" data-inspector-id="html:901e7b20:7">(C) ZHOU YAWEN DESIGN &amp; OPERATION LAB 2024-2026 // KERNEL v3.8.7</div>
+            <div class="border-b border-cyber-panelBorder my-3" data-inspector-id="html:901e7b20:8"></div>
+            
+            <div id="boot-logs" class="space-y-1 text-cyber-dimText" data-inspector-id="html:901e7b20:9">
+                <div data-inspector-id="html:901e7b20:10">[0.001] PROFILE LOADED: 周雅文 (ZHOU YAWEN) | XI'AN TECHNOLOGY UNIVERSITY</div>
+                <div data-inspector-id="html:901e7b20:11">[0.015] VERIFYING CORE SKILLS: PS / AI / PR / SHOWME / CONTENT OPERATION... OK</div>
+                <div data-inspector-id="html:901e7b20:12">[0.042] LOADING OPERATIONAL DATASETS: [XIAOHONGSHU_0-TO-1], [COLLEGE_OFFICIAL_WECHAT]</div>
+                <div data-inspector-id="html:901e7b20:13">[0.089] LOADING DESIGN MODULES: [POSTER_DESIGN], [SUPPORT_PERIPHERALS], [GALLERY]</div>
+                <div data-inspector-id="html:901e7b20:14">[0.120] AUDIO ENGINE &amp; HUD INTERFACES: SYNCHRONIZED</div>
+                <div class="text-cyber-green font-bold text-sm mt-4 animate-pulse" data-inspector-id="html:901e7b20:15">► SYSTEM READY. WELCOME TO YAWEN.OS WORLD.</div>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center text-xs text-cyber-muted" data-inspector-id="html:901e7b20:16">
+            <span data-inspector-id="html:901e7b20:17">CLICK OR PRESS ENTER TO INITIALIZE</span>
+            <button onclick="dismissBoot()" class="px-4 py-2 bg-cyber-green text-black font-bold clip-tech-sm hover:bg-emerald-300" data-inspector-id="html:901e7b20:18">
+                ENTER YAWEN.OS [ENTER]
+            </button>
+        </div>
+    </div>
+
+    <!-- Top System Taskbar / HUD Navigation -->
+    <header class="fixed top-0 left-0 right-0 h-10 bg-cyber-header/90 backdrop-blur-md border-b border-cyber-panelBorder z-50 flex items-center justify-between px-3 text-xs no-select" data-inspector-id="html:901e7b20:19">
+        
+        <!-- Left Brand & OS Menu -->
+        <div class="flex items-center gap-4" data-inspector-id="html:901e7b20:20">
+            <div class="flex items-center gap-2 cursor-pointer font-bold text-white hover:text-cyber-green transition-colors" onclick="openWindow('win-about')" data-inspector-id="html:901e7b20:21">
+                <span class="w-2.5 h-2.5 bg-cyber-green inline-block animate-pulse" data-inspector-id="html:901e7b20:22"></span>
+                <span data-inspector-id="html:901e7b20:23">YAWEN<span class="text-cyber-green" data-inspector-id="html:901e7b20:24">.OS</span></span>
+            </div>
+
+            <!-- Quick Window Launcher Shortcuts -->
+            <div class="hidden md:flex items-center gap-1 text-[11px]" data-inspector-id="html:901e7b20:25">
+                <button onclick="openWindow('win-works')" class="px-2 py-0.5 hover:bg-cyber-panelBorder rounded text-cyber-dimText hover:text-cyber-green flex items-center gap-1" data-inspector-id="html:901e7b20:26">
+                    <i class="fa-solid fa-folder-closed text-[10px]" data-inspector-id="html:901e7b20:27"></i> 作品集 (Works)
+                </button>
+                <button onclick="openWindow('win-about')" class="px-2 py-0.5 hover:bg-cyber-panelBorder rounded text-cyber-dimText hover:text-cyber-green flex items-center gap-1" data-inspector-id="html:901e7b20:28">
+                    <i class="fa-solid fa-id-card text-[10px]" data-inspector-id="html:901e7b20:29"></i> 个人资料 (About)
+                </button>
+                <button onclick="openWindow('win-contact')" class="px-2 py-0.5 hover:bg-cyber-panelBorder rounded text-cyber-dimText hover:text-cyber-green flex items-center gap-1" data-inspector-id="html:901e7b20:30">
+                    <i class="fa-solid fa-address-book text-[10px]" data-inspector-id="html:901e7b20:31"></i> 联系方式 (Contact)
+                </button>
+                <button onclick="openWindow('win-player')" class="px-2 py-0.5 hover:bg-cyber-panelBorder rounded text-cyber-dimText hover:text-cyber-green flex items-center gap-1" data-inspector-id="html:901e7b20:32">
+                    <i class="fa-solid fa-music text-[10px]" data-inspector-id="html:901e7b20:33"></i> 音乐 (Player)
+                </button>
+                <button onclick="openWindow('win-terminal')" class="px-2 py-0.5 hover:bg-cyber-panelBorder rounded text-cyber-dimText hover:text-cyber-green flex items-center gap-1" data-inspector-id="html:901e7b20:34">
+                    <i class="fa-solid fa-terminal text-[10px]" data-inspector-id="html:901e7b20:35"></i> 命令行 (CLI)
+                </button>
+            </div>
+        </div>
+
+        <!-- Right System Indicators -->
+        <div class="flex items-center gap-3 text-[11px]" data-inspector-id="html:901e7b20:36">
+            <div class="hidden lg:flex items-center gap-3 text-cyber-muted text-[10px]" data-inspector-id="html:901e7b20:37">
+                <span data-inspector-id="html:901e7b20:38">SCHOOL: <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:39">西安科技大学</span></span>
+                <span data-inspector-id="html:901e7b20:40">TARGET: <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:41">运营岗</span></span>
+            </div>
+
+            <div class="h-3 w-[1px] bg-cyber-panelBorder hidden lg:block" data-inspector-id="html:901e7b20:42"></div>
+
+            <button onclick="toggleScanlines(); playAudio('beep');" class="px-2 py-0.5 bg-cyber-panel border border-cyber-panelBorder hover:border-cyber-green rounded text-cyber-dimText hover:text-cyber-green text-[10px]" title="Toggle CRT Scanlines" data-inspector-id="html:901e7b20:43">
+                <i class="fa-solid fa-tv mr-1" data-inspector-id="html:901e7b20:44"></i>CRT
+            </button>
+            <button onclick="exportCurrentPage(); playAudio('click');" class="px-2 py-0.5 bg-cyber-green/15 border border-cyber-green/50 hover:bg-cyber-green hover:text-black rounded text-cyber-green text-[10px] font-bold transition-all flex items-center gap-1" title="保存当前页面（含上传的图片）" data-inspector-id="html:901e7b20:45">
+                <i class="fa-solid fa-floppy-disk mr-1" data-inspector-id="html:901e7b20:46"></i>保存
+            </button>
+            <button onclick="toggleAudio();" class="px-2 py-0.5 bg-cyber-panel border border-cyber-panelBorder hover:border-cyber-green rounded text-cyber-dimText hover:text-cyber-green text-[10px]" title="Toggle Audio" data-inspector-id="html:901e7b20:47">
+                <i class="fa-solid fa-volume-high mr-1" id="audio-icon" data-inspector-id="html:901e7b20:48"></i><span id="audio-status" data-inspector-id="html:901e7b20:49">SFX:ON</span>
+            </button>
+
+            <!-- Realtime Clock -->
+            <div class="bg-black/60 px-2.5 py-0.5 border border-cyber-panelBorder rounded font-mono text-cyber-green font-bold" id="top-clock" data-inspector-id="html:901e7b20:50">18:57:59 JST</div>
+        </div>
+    </header>
+
+    <!-- Main OS Desktop Canvas -->
+    <main class="fixed inset-0 pt-12 pb-10 px-4 z-10 overflow-hidden bg-tech-grid flex flex-col justify-between" id="desktop-canvas" data-inspector-id="html:901e7b20:51">
+        
+        <!-- Desktop Shortcuts Grid (Left Side) -->
+        <div class="grid grid-cols-2 sm:grid-cols-1 gap-4 w-28 no-select z-10" data-inspector-id="html:901e7b20:52">
+            
+            <!-- Icon 1: Works -->
+            <div onclick="openWindow('win-works'); playAudio('click');" class="group flex flex-col items-center justify-center p-2 rounded cursor-pointer hover:bg-cyber-green/10 border border-transparent hover:border-cyber-green/40 transition-all text-center" data-inspector-id="html:901e7b20:53">
+                <div class="w-12 h-12 bg-cyber-panel border border-cyber-panelBorder group-hover:border-cyber-green clip-tech-sm flex items-center justify-center text-cyber-green text-xl shadow-lg transition-transform group-hover:scale-110" data-inspector-id="html:901e7b20:54">
+                    <i class="fa-solid fa-folder-open" data-inspector-id="html:901e7b20:55"></i>
+                </div>
+                <span class="text-[11px] text-white mt-1.5 font-bold tracking-wider group-hover:text-cyber-green bg-black/60 px-1 rounded" data-inspector-id="html:901e7b20:56">作品集</span>
+            </div>
+
+            <!-- Icon 2: About / Personal Profile -->
+            <div onclick="openWindow('win-about'); playAudio('click');" class="group flex flex-col items-center justify-center p-2 rounded cursor-pointer hover:bg-cyber-green/10 border border-transparent hover:border-cyber-green/40 transition-all text-center" data-inspector-id="html:901e7b20:57">
+                <div class="w-12 h-12 bg-cyber-panel border border-cyber-panelBorder group-hover:border-cyber-green clip-tech-sm flex items-center justify-center text-cyber-green text-xl shadow-lg transition-transform group-hover:scale-110" data-inspector-id="html:901e7b20:58">
+                    <i class="fa-solid fa-id-card" data-inspector-id="html:901e7b20:59"></i>
+                </div>
+                <span class="text-[11px] text-white mt-1.5 font-bold tracking-wider group-hover:text-cyber-green bg-black/60 px-1 rounded" data-inspector-id="html:901e7b20:60">个人资料</span>
+            </div>
+
+            <!-- Icon 3: Contact Info -->
+            <div onclick="openWindow('win-contact'); playAudio('click');" class="group flex flex-col items-center justify-center p-2 rounded cursor-pointer hover:bg-cyber-green/10 border border-transparent hover:border-cyber-green/40 transition-all text-center" data-inspector-id="html:901e7b20:61">
+                <div class="w-12 h-12 bg-cyber-panel border border-cyber-panelBorder group-hover:border-cyber-green clip-tech-sm flex items-center justify-center text-cyber-green text-xl shadow-lg transition-transform group-hover:scale-110" data-inspector-id="html:901e7b20:62">
+                    <i class="fa-solid fa-address-book" data-inspector-id="html:901e7b20:63"></i>
+                </div>
+                <span class="text-[11px] text-white mt-1.5 font-bold tracking-wider group-hover:text-cyber-green bg-black/60 px-1 rounded" data-inspector-id="html:901e7b20:64">联系方式</span>
+            </div>
+
+            <!-- Icon 4: Music Player -->
+            <div onclick="openWindow('win-player'); playAudio('click');" class="group flex flex-col items-center justify-center p-2 rounded cursor-pointer hover:bg-cyber-green/10 border border-transparent hover:border-cyber-green/40 transition-all text-center" data-inspector-id="html:901e7b20:65">
+                <div class="w-12 h-12 bg-cyber-panel border border-cyber-panelBorder group-hover:border-cyber-green clip-tech-sm flex items-center justify-center text-cyber-green text-xl shadow-lg transition-transform group-hover:scale-110" data-inspector-id="html:901e7b20:66">
+                    <i class="fa-solid fa-compact-disc" data-inspector-id="html:901e7b20:67"></i>
+                </div>
+                <span class="text-[11px] text-white mt-1.5 font-bold tracking-wider group-hover:text-cyber-green bg-black/60 px-1 rounded" data-inspector-id="html:901e7b20:68">音乐播放器</span>
+            </div>
+
+            <!-- Icon 5: Terminal -->
+            <div onclick="openWindow('win-terminal'); playAudio('click');" class="group flex flex-col items-center justify-center p-2 rounded cursor-pointer hover:bg-cyber-green/10 border border-transparent hover:border-cyber-green/40 transition-all text-center" data-inspector-id="html:901e7b20:69">
+                <div class="w-12 h-12 bg-cyber-panel border border-cyber-panelBorder group-hover:border-cyber-green clip-tech-sm flex items-center justify-center text-cyber-green text-xl shadow-lg transition-transform group-hover:scale-110" data-inspector-id="html:901e7b20:70">
+                    <i class="fa-solid fa-terminal" data-inspector-id="html:901e7b20:71"></i>
+                </div>
+                <span class="text-[11px] text-white mt-1.5 font-bold tracking-wider group-hover:text-cyber-green bg-black/60 px-1 rounded" data-inspector-id="html:901e7b20:72">终端控制台</span>
+            </div>
+
+            <!-- Icon 6: Paint -->
+            <div onclick="openWindow('win-paint'); playAudio('click');" class="group flex flex-col items-center justify-center p-2 rounded cursor-pointer hover:bg-cyber-green/10 border border-transparent hover:border-cyber-green/40 transition-all text-center" data-inspector-id="html:901e7b20:73">
+                <div class="w-12 h-12 bg-cyber-panel border border-cyber-panelBorder group-hover:border-cyber-green clip-tech-sm flex items-center justify-center text-cyber-green text-xl shadow-lg transition-transform group-hover:scale-110" data-inspector-id="html:901e7b20:74">
+                    <i class="fa-solid fa-paint-brush" data-inspector-id="html:901e7b20:75"></i>
+                </div>
+                <span class="text-[11px] text-white mt-1.5 font-bold tracking-wider group-hover:text-cyber-green bg-black/60 px-1 rounded" data-inspector-id="html:901e7b20:76">画板工具</span>
+            </div>
+
+        </div>
+
+        <!-- Desktop Floating Info Watermark -->
+        <div class="absolute bottom-12 right-6 pointer-events-none opacity-40 text-right hidden md:block" data-inspector-id="html:901e7b20:77">
+            <div class="text-xs text-cyber-green font-bold" data-inspector-id="html:901e7b20:78">ZHOU YAWEN // PORTFOLIO ARCHIVE (2024-2026)</div>
+            <div class="text-[10px] text-cyber-muted" data-inspector-id="html:901e7b20:79">CONTENT OPERATION | VISUAL CREATION</div>
+            <div class="text-[10px] text-cyber-dimText mt-1" data-inspector-id="html:901e7b20:80">WWW.ZHOUYAWEN.COM</div>
+        </div>
+
+    </main>
+
+    <!-- DRAGGABLE WINDOW 1: WORKS / PORTFOLIO -->
+    <div id="win-works" class="draggable-window fixed top-14 left-4 sm:left-28 w-[94vw] sm:w-[720px] lg:w-[900px] max-h-[85vh] bg-cyber-panel border border-cyber-panelBorder rounded clip-tech-lg flex flex-col shadow-2xl z-20 transition-shadow duration-300" data-inspector-id="html:901e7b20:81" style="z-index: 58; left: 111px; top: 56px; display: none;">
+        <!-- Window Header Bar -->
+        <div class="window-header bg-cyber-header border-b border-cyber-panelBorder px-3 py-2 flex items-center justify-between cursor-move no-select" data-inspector-id="html:901e7b20:82">
+            <div class="flex items-center gap-2 text-xs font-bold text-white" data-inspector-id="html:901e7b20:83">
+                <i class="fa-solid fa-folder-open text-cyber-green" data-inspector-id="html:901e7b20:84"></i>
+                <span data-inspector-id="html:901e7b20:85">C:\ZHOUYAWEN\WORKS_PORTFOLIO (2024-2026) // 作品与运营选集</span>
+            </div>
+            <div class="flex items-center gap-1.5" data-inspector-id="html:901e7b20:86">
+                <button onclick="minimizeWindow('win-works')" class="w-3.5 h-3.5 rounded-full bg-yellow-500/80 hover:bg-yellow-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:87"><i class="fa-solid fa-minus" data-inspector-id="html:901e7b20:88"></i></button>
+                <button onclick="closeWindow('win-works')" class="w-3.5 h-3.5 rounded-full bg-red-500/80 hover:bg-red-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:89"><i class="fa-solid fa-xmark" data-inspector-id="html:901e7b20:90"></i></button>
+            </div>
+        </div>
+
+        <!-- Window Sub-Header / Filters -->
+        <div class="bg-black/50 border-b border-cyber-panelBorder p-3 flex flex-wrap items-center justify-between gap-2 text-xs" data-inspector-id="html:901e7b20:91">
+            <div class="text-cyber-muted text-[11px]" data-inspector-id="html:901e7b20:92">分类模块:</div>
+            <div class="flex flex-wrap gap-1.5" id="works-filter" data-inspector-id="html:901e7b20:93">
+                <button onclick="filterWorks('all', this); playAudio('click');" class="filter-btn active px-2.5 py-1 text-[10px] bg-cyber-green text-black font-bold clip-tech-sm" data-inspector-id="html:901e7b20:94">全部作品 [ALL]</button>
+                <button onclick="filterWorks('operation', this); playAudio('click');" class="filter-btn px-2.5 py-1 text-[10px] bg-cyber-panel border border-cyber-panelBorder text-cyber-muted hover:text-cyber-green hover:border-cyber-green clip-tech-sm" data-inspector-id="html:901e7b20:95">PART1. 账号运营</button>
+                <button onclick="filterWorks('poster', this); playAudio('click');" class="filter-btn px-2.5 py-1 text-[10px] bg-cyber-panel border border-cyber-panelBorder text-cyber-muted hover:text-cyber-green hover:border-cyber-green clip-tech-sm" data-inspector-id="html:901e7b20:96">PART2. 海报设计</button>
+                <button onclick="filterWorks('support', this); playAudio('click');" class="filter-btn px-2.5 py-1 text-[10px] bg-cyber-panel border border-cyber-panelBorder text-cyber-muted hover:text-cyber-green hover:border-cyber-green clip-tech-sm" data-inspector-id="html:901e7b20:97">PART2. 周边应援</button>
+                <button onclick="filterWorks('photo', this); playAudio('click');" class="filter-btn px-2.5 py-1 text-[10px] bg-cyber-panel border border-cyber-panelBorder text-cyber-muted hover:text-cyber-green hover:border-cyber-green clip-tech-sm" data-inspector-id="html:901e7b20:98">PART3. 摄影记录</button>
+            </div>
+        </div>
+
+        <!-- Window Content Area -->
+        <div class="p-4 overflow-y-auto space-y-4 max-h-[64vh]" data-inspector-id="html:901e7b20:99">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="works-grid" data-inspector-id="html:901e7b20:100">
+                
+                <!-- Project 1: 小红书运营 -->
+                <div class="work-card operation bg-cyber-bg border border-cyber-panelBorder hover:border-cyber-green transition-all p-3 clip-tech-sm group cursor-pointer" data-category="operation" onclick="openAllagiDetail(0); playAudio('click');" data-inspector-id="html:901e7b20:101">
+                    <div class="relative overflow-hidden aspect-video bg-black rounded mb-3 border border-cyber-panelBorder" onclick="event.stopPropagation(); document.getElementById('work-upload-1').click()" title="点击可多选/批量上传作品图片" data-inspector-id="html:901e7b20:102">
+                        <!-- Multi-image gallery container -->
+                        <div id="work-gallery-1" class="w-full h-full grid grid-cols-2 gap-1 p-1" data-inspector-id="html:901e7b20:103"><img src="images/image_01.jpeg" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_02.png" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"></div>
+                        
+                        <!-- Hover Overlay for Upload -->
+                        <div class="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity text-[10px] text-cyber-green font-bold text-center p-1 z-10 pointer-events-none" data-inspector-id="html:901e7b20:106">
+                            <i class="fa-solid fa-images text-base mb-1" data-inspector-id="html:901e7b20:107"></i>
+                            <span data-inspector-id="html:901e7b20:108">点击批量上传/替换多张图片 (支持多选)</span>
+                        </div>
+
+                        <div class="absolute top-2 left-2 text-[9px] bg-black/80 text-cyber-green px-1.5 py-0.5 border border-cyber-green/40 z-20 pointer-events-none" data-inspector-id="html:901e7b20:109">
+                            PRJ_01 // 小红书
+                        </div>
+                    </div>
+                    <input type="file" id="work-upload-1" accept="image/*" multiple="" class="hidden" onchange="handleMultiWorkImageUpload(event, 'work-gallery-1')" data-inspector-id="html:901e7b20:110">
+
+                    <div class="flex items-center justify-between text-[10px] text-cyber-muted mb-1" data-inspector-id="html:901e7b20:111">
+                        <span data-inspector-id="html:901e7b20:112">账号：橘子猫冰美式</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:113">单篇最高赞藏4K+</span>
+                    </div>
+                    <h4 class="text-base font-bold text-white group-hover:text-cyber-green transition-colors" data-inspector-id="html:901e7b20:114">小红书垂直兴趣内容账号运营</h4>
+                    <p class="text-cyber-dimText text-xs mt-1 line-clamp-2" data-inspector-id="html:901e7b20:115">
+                        围绕偶像节点与粉丝审美需求，从0到1搭建账号。3个月持续运营产出100+原创作品，掌握节点洞察、选题策划、视觉生产与数据复盘全流程。
+                    </p>
+                    <button class="mt-3 w-full py-1.5 bg-cyber-panel border border-cyber-panelBorder hover:border-cyber-green text-cyber-green text-xs font-bold clip-tech-sm transition-all flex items-center justify-center gap-1" data-inspector-id="html:901e7b20:116">
+                        <i class="fa-solid fa-arrow-right text-[10px]" data-inspector-id="html:901e7b20:117"></i> 点击进入详情 (ALLAGI SHOWCASE)
+                    </button>
+                </div>
+
+                <!-- Project 2: 学院公众号运营 -->
+                <div class="work-card operation bg-cyber-bg border border-cyber-panelBorder hover:border-cyber-green transition-all p-3 clip-tech-sm group cursor-pointer" data-category="operation" onclick="openAllagiDetail(1); playAudio('click');" data-inspector-id="html:901e7b20:118">
+                    <div class="relative overflow-hidden aspect-video bg-black rounded mb-3 border border-cyber-panelBorder" onclick="event.stopPropagation(); document.getElementById('work-upload-2').click()" title="点击可多选/批量上传作品图片" data-inspector-id="html:901e7b20:119">
+                        <!-- Multi-image gallery container -->
+                        <div id="work-gallery-2" class="w-full h-full grid grid-cols-2 gap-1 p-1" data-inspector-id="html:901e7b20:120"><img src="images/image_03.jpeg" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_04.jpeg" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"></div>
+                        
+                        <!-- Hover Overlay for Upload -->
+                        <div class="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity text-[10px] text-cyber-green font-bold text-center p-1 z-10 pointer-events-none" data-inspector-id="html:901e7b20:123">
+                            <i class="fa-solid fa-images text-base mb-1" data-inspector-id="html:901e7b20:124"></i>
+                            <span data-inspector-id="html:901e7b20:125">点击批量上传/替换多张图片 (支持多选)</span>
+                        </div>
+
+                        <div class="absolute top-2 left-2 text-[9px] bg-black/80 text-cyber-green px-1.5 py-0.5 border border-cyber-green/40 z-20 pointer-events-none" data-inspector-id="html:901e7b20:126">
+                            PRJ_02 // 官方媒体
+                        </div>
+                    </div>
+                    <input type="file" id="work-upload-2" accept="image/*" multiple="" class="hidden" onchange="handleMultiWorkImageUpload(event, 'work-gallery-2')" data-inspector-id="html:901e7b20:127">
+
+                    <div class="flex items-center justify-between text-[10px] text-cyber-muted mb-1" data-inspector-id="html:901e7b20:128">
+                        <span data-inspector-id="html:901e7b20:129">西安科技大学安全学院团委</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:130">网新中心编辑部</span>
+                    </div>
+                    <h4 class="text-base font-bold text-white group-hover:text-cyber-green transition-colors" data-inspector-id="html:901e7b20:131">学院官方公众号内容运营与采风</h4>
+                    <p class="text-cyber-dimText text-xs mt-1 line-clamp-2" data-inspector-id="html:901e7b20:132">
+                        负责官方公众号选题策划、图文编辑与秀米排版，把控准确性与时效性。同时承担活动现场摄影记录，为学院宣传提供优质影像。
+                    </p>
+                    <button class="mt-3 w-full py-1.5 bg-cyber-panel border border-cyber-panelBorder hover:border-cyber-green text-cyber-green text-xs font-bold clip-tech-sm transition-all flex items-center justify-center gap-1" data-inspector-id="html:901e7b20:133">
+                        <i class="fa-solid fa-arrow-right text-[10px]" data-inspector-id="html:901e7b20:134"></i> 点击进入详情 (ALLAGI SHOWCASE)
+                    </button>
+                </div>
+
+                <!-- Project 3: 人物海报设计 (已删除文本简介) -->
+                <div class="work-card poster bg-cyber-bg border border-cyber-panelBorder hover:border-cyber-green transition-all p-3 clip-tech-sm group cursor-pointer" data-category="poster" onclick="openAllagiDetail(2); playAudio('click');" data-inspector-id="html:901e7b20:135">
+                    <div class="relative overflow-hidden aspect-video bg-black rounded mb-3 border border-cyber-panelBorder" onclick="event.stopPropagation(); document.getElementById('work-upload-3').click()" title="点击可多选/批量上传作品图片" data-inspector-id="html:901e7b20:136">
+                        <!-- Multi-image gallery container -->
+                        <div id="work-gallery-3" class="w-full h-full grid grid-cols-2 gap-1 p-1" data-inspector-id="html:901e7b20:137"><img src="images/image_05.png" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_06.png" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_07.png" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"></div>
+                        
+                        <!-- Hover Overlay for Upload -->
+                        <div class="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity text-[10px] text-cyber-green font-bold text-center p-1 z-10 pointer-events-none" data-inspector-id="html:901e7b20:140">
+                            <i class="fa-solid fa-images text-base mb-1" data-inspector-id="html:901e7b20:141"></i>
+                            <span data-inspector-id="html:901e7b20:142">点击批量上传/替换多张图片 (支持多选)</span>
+                        </div>
+
+                        <div class="absolute top-2 left-2 text-[9px] bg-black/80 text-cyber-green px-1.5 py-0.5 border border-cyber-green/40 z-20 pointer-events-none" data-inspector-id="html:901e7b20:143">
+                            PRJ_03 // 视觉海报
+                        </div>
+                    </div>
+                    <input type="file" id="work-upload-3" accept="image/*" multiple="" class="hidden" onchange="handleMultiWorkImageUpload(event, 'work-gallery-3')" data-inspector-id="html:901e7b20:144">
+
+                    <div class="flex items-center justify-between text-[10px] text-cyber-muted mb-1" data-inspector-id="html:901e7b20:145">
+                        <span data-inspector-id="html:901e7b20:146">TAG: PS / AI / 氛围视觉</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:147">视觉设计</span>
+                    </div>
+                    <h4 class="text-base font-bold text-white group-hover:text-cyber-green transition-colors" data-inspector-id="html:901e7b20:148">人物与明星概念海报设计选集</h4>
+                    <button class="mt-3 w-full py-1.5 bg-cyber-panel border border-cyber-panelBorder hover:border-cyber-green text-cyber-green text-xs font-bold clip-tech-sm transition-all flex items-center justify-center gap-1" data-inspector-id="html:901e7b20:149">
+                        <i class="fa-solid fa-arrow-right text-[10px]" data-inspector-id="html:901e7b20:150"></i> 点击进入详情 (ALLAGI SHOWCASE)
+                    </button>
+                </div>
+
+                <!-- Project 4: 周边应援设计 (已删除文本简介) -->
+                <div class="work-card support bg-cyber-bg border border-cyber-panelBorder hover:border-cyber-green transition-all p-3 clip-tech-sm group cursor-pointer" data-category="support" onclick="openAllagiDetail(3); playAudio('click');" data-inspector-id="html:901e7b20:151">
+                    <div class="relative overflow-hidden aspect-video bg-black rounded mb-3 border border-cyber-panelBorder" onclick="event.stopPropagation(); document.getElementById('work-upload-4').click()" title="点击可多选/批量上传作品图片" data-inspector-id="html:901e7b20:152">
+                        <!-- Multi-image gallery container -->
+                        <div id="work-gallery-4" class="w-full h-full grid grid-cols-3 gap-1 p-1" data-inspector-id="html:901e7b20:153"><img src="images/image_08.png" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_09.png" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_10.png" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_11.png" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_12.png" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"></div>
+                        
+                        <!-- Hover Overlay for Upload -->
+                        <div class="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity text-[10px] text-cyber-green font-bold text-center p-1 z-10 pointer-events-none" data-inspector-id="html:901e7b20:156">
+                            <i class="fa-solid fa-images text-base mb-1" data-inspector-id="html:901e7b20:157"></i>
+                            <span data-inspector-id="html:901e7b20:158">点击批量上传/替换多张图片 (支持多选)</span>
+                        </div>
+
+                        <div class="absolute top-2 left-2 text-[9px] bg-black/80 text-cyber-green px-1.5 py-0.5 border border-cyber-green/40 z-20 pointer-events-none" data-inspector-id="html:901e7b20:159">
+                            PRJ_04 // 物料设计
+                        </div>
+                    </div>
+                    <input type="file" id="work-upload-4" accept="image/*" multiple="" class="hidden" onchange="handleMultiWorkImageUpload(event, 'work-gallery-4')" data-inspector-id="html:901e7b20:160">
+
+                    <div class="flex items-center justify-between text-[10px] text-cyber-muted mb-1" data-inspector-id="html:901e7b20:161">
+                        <span data-inspector-id="html:901e7b20:162">毛巾手幅 / 徽章 / 大王扇</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:163">周边衍生</span>
+                    </div>
+                    <h4 class="text-base font-bold text-white group-hover:text-cyber-green transition-colors" data-inspector-id="html:901e7b20:164">周边应援与长图物料设计 SET</h4>
+                    <button class="mt-3 w-full py-1.5 bg-cyber-panel border border-cyber-panelBorder hover:border-cyber-green text-cyber-green text-xs font-bold clip-tech-sm transition-all flex items-center justify-center gap-1" data-inspector-id="html:901e7b20:165">
+                        <i class="fa-solid fa-arrow-right text-[10px]" data-inspector-id="html:901e7b20:166"></i> 点击进入详情 (ALLAGI SHOWCASE)
+                    </button>
+                </div>
+
+                <!-- Project 5: 摄影作品 (已删除文本简介) -->
+                <div class="work-card photo bg-cyber-bg border border-cyber-panelBorder hover:border-cyber-green transition-all p-3 clip-tech-sm group cursor-pointer" data-category="photo" onclick="openAllagiDetail(4); playAudio('click');" data-inspector-id="html:901e7b20:167">
+                    <div class="relative overflow-hidden aspect-video bg-black rounded mb-3 border border-cyber-panelBorder" onclick="event.stopPropagation(); document.getElementById('work-upload-5').click()" title="点击可多选/批量上传作品图片" data-inspector-id="html:901e7b20:168">
+                        <!-- Multi-image gallery container -->
+                        <div id="work-gallery-5" class="w-full h-full grid grid-cols-3 gap-1 p-1" data-inspector-id="html:901e7b20:169"><img src="images/image_13.jpeg" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_14.jpeg" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_15.jpeg" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_16.jpeg" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_17.jpeg" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"><img src="images/image_18.jpeg" class="w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity"></div>
+                        
+                        <!-- Hover Overlay for Upload -->
+                        <div class="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity text-[10px] text-cyber-green font-bold text-center p-1 z-10 pointer-events-none" data-inspector-id="html:901e7b20:172">
+                            <i class="fa-solid fa-images text-base mb-1" data-inspector-id="html:901e7b20:173"></i>
+                            <span data-inspector-id="html:901e7b20:174">点击批量上传/替换多张图片 (支持多选)</span>
+                        </div>
+
+                        <div class="absolute top-2 left-2 text-[9px] bg-black/80 text-cyber-green px-1.5 py-0.5 border border-cyber-green/40 z-20 pointer-events-none" data-inspector-id="html:901e7b20:175">
+                            PRJ_05 // 摄影纪实
+                        </div>
+                    </div>
+                    <input type="file" id="work-upload-5" accept="image/*" multiple="" class="hidden" onchange="handleMultiWorkImageUpload(event, 'work-gallery-5')" data-inspector-id="html:901e7b20:176">
+
+                    <div class="flex items-center justify-between text-[10px] text-cyber-muted mb-1" data-inspector-id="html:901e7b20:177">
+                        <span data-inspector-id="html:901e7b20:178">活动抓拍 / 人像 / 纪实</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:179">摄影</span>
+                    </div>
+                    <h4 class="text-base font-bold text-white group-hover:text-cyber-green transition-colors" data-inspector-id="html:901e7b20:180">活动现场与生活纪实摄影作品集</h4>
+                    <button class="mt-3 w-full py-1.5 bg-cyber-panel border border-cyber-panelBorder hover:border-cyber-green text-cyber-green text-xs font-bold clip-tech-sm transition-all flex items-center justify-center gap-1" data-inspector-id="html:901e7b20:181">
+                        <i class="fa-solid fa-arrow-right text-[10px]" data-inspector-id="html:901e7b20:182"></i> 点击进入详情 (ALLAGI SHOWCASE)
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- DRAGGABLE WINDOW 2: ABOUT / PERSONAL PROFILE -->
+    <div id="win-about" class="draggable-window fixed top-16 left-6 sm:left-[320px] w-[92vw] sm:w-[580px] max-h-[82vh] bg-cyber-panel border border-cyber-panelBorder rounded clip-tech-lg flex flex-col shadow-2xl z-30 transition-shadow duration-300 window-active" data-inspector-id="html:901e7b20:183" style="z-index: 61; display: none;">
+        <!-- Window Header Bar -->
+        <div class="window-header bg-cyber-header border-b border-cyber-panelBorder px-3 py-2 flex items-center justify-between cursor-move no-select" data-inspector-id="html:901e7b20:184">
+            <div class="flex items-center gap-2 text-xs font-bold text-white" data-inspector-id="html:901e7b20:185">
+                <i class="fa-solid fa-id-badge text-cyber-green" data-inspector-id="html:901e7b20:186"></i>
+                <span data-inspector-id="html:901e7b20:187">C:\ZHOUYAWEN\PROFILE.DAT // 周雅文 个人档案</span>
+            </div>
+            <div class="flex items-center gap-1.5" data-inspector-id="html:901e7b20:188">
+                <button onclick="minimizeWindow('win-about')" class="w-3.5 h-3.5 rounded-full bg-yellow-500/80 hover:bg-yellow-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:189"><i class="fa-solid fa-minus" data-inspector-id="html:901e7b20:190"></i></button>
+                <button onclick="closeWindow('win-about')" class="w-3.5 h-3.5 rounded-full bg-red-500/80 hover:bg-red-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:191"><i class="fa-solid fa-xmark" data-inspector-id="html:901e7b20:192"></i></button>
+            </div>
+        </div>
+
+        <!-- Window Content Area -->
+        <div class="p-5 overflow-y-auto space-y-4 max-h-[68vh] text-xs leading-relaxed" data-inspector-id="html:901e7b20:193">
+            
+            <div class="flex items-center gap-4 border-b border-cyber-panelBorder pb-4" data-inspector-id="html:901e7b20:194">
+                <!-- Interactive Avatar Box with Click-to-Upload & URL Support -->
+                <div class="w-24 h-28 bg-black border-2 border-cyber-green clip-tech-sm overflow-hidden flex-shrink-0 relative shadow-lg group cursor-pointer" onclick="document.getElementById('avatar-upload-input').click()" title="点击更换/上传照片" data-inspector-id="html:901e7b20:195">
+                    <img id="user-avatar-img" src="images/image_19.jpeg" alt="周雅文 照片" class="w-full h-full object-cover object-top hover:scale-105 transition-all duration-300" onerror="this.onerror=null; this.src='https://placehold.co/300x350/0c120e/00ff66?text=ZHOU+YAWEN'" data-inspector-id="html:901e7b20:196">
+                    
+                    <!-- Hover overlay for uploading photo or pasting URL -->
+                    <div class="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center transition-opacity text-[10px] text-cyber-green font-bold text-center p-1 gap-1" data-inspector-id="html:901e7b20:197">
+                        <i class="fa-solid fa-camera text-sm" data-inspector-id="html:901e7b20:198"></i>
+                        <span data-inspector-id="html:901e7b20:199">点击本地上传</span>
+                        <button onclick="event.stopPropagation(); changeImageByUrl('user-avatar-img');" class="px-1.5 py-0.5 bg-cyber-green text-black rounded text-[9px] hover:bg-emerald-300 mt-1" data-inspector-id="html:901e7b20:200">
+                            粘贴图片URL
+                        </button>
+                    </div>
+                    <div class="absolute bottom-0 inset-x-0 bg-black/80 text-[8px] text-cyber-green text-center font-bold" data-inspector-id="html:901e7b20:201">2005.04.07</div>
+                </div>
+                
+                <!-- Hidden file input for uploading photo directly inside preview -->
+                <input type="file" id="avatar-upload-input" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)" data-inspector-id="html:901e7b20:202">
+
+                <div data-inspector-id="html:901e7b20:203">
+                    <h3 class="text-xl font-extrabold text-white tracking-wider" data-inspector-id="html:901e7b20:204">周雅文 <span class="text-cyber-green text-sm font-mono" data-inspector-id="html:901e7b20:205">(ZHOU YAWEN)</span></h3>
+                    <div class="text-cyber-green text-[11px] font-bold mt-0.5" data-inspector-id="html:901e7b20:206">西安科技大学 // XIAN TECHNOLOGY UNIVERSITY</div>
+                    <div class="text-cyber-muted text-[11px] mt-1 font-bold" data-inspector-id="html:901e7b20:207">求职方向：运营岗</div>
+                    <div class="text-cyber-dimText text-[10px] mt-1 flex items-center gap-2" data-inspector-id="html:901e7b20:208">
+                        <span data-inspector-id="html:901e7b20:209"><i class="fa-solid fa-globe text-cyber-green" data-inspector-id="html:901e7b20:210"></i> www.zhouyawen.com</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Summary Section -->
+            <div class="bg-cyber-bg border border-cyber-panelBorder p-3.5 clip-tech-sm space-y-3" data-inspector-id="html:901e7b20:211">
+                <div class="text-cyber-green font-bold text-[11px] flex items-center gap-1.5" data-inspector-id="html:901e7b20:212">
+                    <i class="fa-solid fa-user-gear" data-inspector-id="html:901e7b20:213"></i> ABOUT ME // 个人能力概览
+                </div>
+                
+                <div class="space-y-3 text-cyber-dimText" data-inspector-id="html:901e7b20:214">
+                    <div data-inspector-id="html:901e7b20:215">
+                        <strong class="text-white" data-inspector-id="html:901e7b20:216">1. 视觉设计能力：</strong>
+                        具备扎实的 PS/AI 设计能力与个人审美体系，能根据不同风格需求独立完成从选题到成稿的全流程视觉产出。
+                        <div class="text-[10px] text-cyber-muted mt-1 italic font-sans border-l border-cyber-panelBorder pl-2" data-inspector-id="html:901e7b20:217">
+                            [Visual Design Skills] Possess solid PS/AI design capabilities and a refined aesthetic system, capable of independently executing end-to-end visual content creation from topic planning to final artwork tailored to diverse stylistic requirements.
+                        </div>
+                    </div>
+                    <div data-inspector-id="html:901e7b20:218">
+                        <strong class="text-white" data-inspector-id="html:901e7b20:219">2. 内容运营能力：</strong>
+                        熟悉平台流量机制与用户偏好，具备从 0 到 1 起号经验，能独立完成选题策划、视觉呈现与数据复盘；跑通了从内容到变现的完整闭环。
+                        <div class="text-[10px] text-cyber-muted mt-1 italic font-sans border-l border-cyber-panelBorder pl-2" data-inspector-id="html:901e7b20:220">
+                            [Content Operation Skills] Well-versed in platform traffic algorithms and user preferences with hands-on experience building accounts from 0 to 1. Capable of independently conducting content planning, visual presentation, and data analytics to close the monetization loop.
+                        </div>
+                    </div>
+                    <div data-inspector-id="html:901e7b20:221">
+                        <strong class="text-white" data-inspector-id="html:901e7b20:222">3. 活动策划与执行能力：</strong>
+                        具备多场百人规模粉丝主题活动的策划与执行经验，负责视觉物料设计与传播机制设计，熟悉从前期筹备到现场落地的全流程。
+                        <div class="text-[10px] text-cyber-muted mt-1 italic font-sans border-l border-cyber-panelBorder pl-2" data-inspector-id="html:901e7b20:223">
+                            [Event Planning &amp; Execution] Experienced in planning and orchestrating fan-themed events with 100+ attendees. Skilled in visual collateral design and viral propagation strategy across the complete lifecycle from preparation to live execution.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skill Badges -->
+            <div class="space-y-2" data-inspector-id="html:901e7b20:224">
+                <div class="text-white font-bold text-xs uppercase tracking-wider flex items-center justify-between" data-inspector-id="html:901e7b20:225">
+                    <span data-inspector-id="html:901e7b20:226">掌握技能 (CORE SKILLS)</span>
+                    <span class="text-cyber-muted font-mono" data-inspector-id="html:901e7b20:227">SPECS_2026</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2 text-cyber-dimText font-mono" data-inspector-id="html:901e7b20:228">
+                    <div class="p-2 bg-black border border-cyber-panelBorder rounded flex items-center justify-between" data-inspector-id="html:901e7b20:229">
+                        <span data-inspector-id="html:901e7b20:230">Photoshop (PS)</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:231">精通</span>
+                    </div>
+                    <div class="p-2 bg-black border border-cyber-panelBorder rounded flex items-center justify-between" data-inspector-id="html:901e7b20:232">
+                        <span data-inspector-id="html:901e7b20:233">Illustrator (AI)</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:234">精通</span>
+                    </div>
+                    <div class="p-2 bg-black border border-cyber-panelBorder rounded flex items-center justify-between" data-inspector-id="html:901e7b20:235">
+                        <span data-inspector-id="html:901e7b20:236">Premiere (Pr)</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:237">熟练</span>
+                    </div>
+                    <div class="p-2 bg-black border border-cyber-panelBorder rounded flex items-center justify-between" data-inspector-id="html:901e7b20:238">
+                        <span data-inspector-id="html:901e7b20:239">秀米 / 公众号排版</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:240">熟练</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Language Proficiency -->
+            <div class="space-y-2" data-inspector-id="html:901e7b20:241">
+                <div class="text-white font-bold text-xs uppercase tracking-wider flex items-center justify-between" data-inspector-id="html:901e7b20:242">
+                    <span data-inspector-id="html:901e7b20:243">语言能力 (LANGUAGES)</span>
+                    <span class="text-cyber-muted font-mono" data-inspector-id="html:901e7b20:244">LANG_2026</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-cyber-dimText font-mono" data-inspector-id="html:901e7b20:245">
+                    <div class="p-2 bg-black border border-cyber-panelBorder rounded flex items-center justify-between" data-inspector-id="html:901e7b20:246">
+                        <span data-inspector-id="html:901e7b20:247"><i class="fa-solid fa-language text-cyber-green mr-1.5" data-inspector-id="html:901e7b20:248"></i>英语 (EN)</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:249">熟练</span>
+                    </div>
+                    <div class="p-2 bg-black border border-cyber-panelBorder rounded flex items-center justify-between" data-inspector-id="html:901e7b20:250">
+                        <span data-inspector-id="html:901e7b20:251"><i class="fa-solid fa-language text-cyber-green mr-1.5" data-inspector-id="html:901e7b20:252"></i>韩语 (KO)</span>
+                        <span class="text-cyber-green font-bold" data-inspector-id="html:901e7b20:253">入门</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-2 border-t border-cyber-panelBorder flex justify-between items-center" data-inspector-id="html:901e7b20:254">
+                <button onclick="openWindow('win-contact'); playAudio('click');" class="px-4 py-2 bg-cyber-green text-black font-bold text-xs clip-tech-sm hover:bg-emerald-300 transition-all flex items-center gap-1.5" data-inspector-id="html:901e7b20:255">
+                    <i class="fa-solid fa-paper-plane" data-inspector-id="html:901e7b20:256"></i> 联系周雅文 (CONTACT ME)
+                </button>
+                <span class="text-[10px] text-cyber-muted" data-inspector-id="html:901e7b20:257">TEL: 18078960716</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DRAGGABLE WINDOW 3: CONTACT INFO -->
+    <div id="win-contact" class="draggable-window fixed top-24 right-10 w-[88vw] sm:w-[420px] bg-cyber-panel border border-cyber-panelBorder rounded clip-tech-lg flex flex-col shadow-2xl z-20 transition-shadow duration-300" data-inspector-id="html:901e7b20:258" style="z-index: 53; display: none;">
+        <!-- Window Header -->
+        <div class="window-header bg-cyber-header border-b border-cyber-panelBorder px-3 py-2 flex items-center justify-between cursor-move no-select" data-inspector-id="html:901e7b20:259">
+            <div class="flex items-center gap-2 text-xs font-bold text-white" data-inspector-id="html:901e7b20:260">
+                <i class="fa-solid fa-address-book text-cyber-green" data-inspector-id="html:901e7b20:261"></i>
+                <span data-inspector-id="html:901e7b20:262">CONTACT_DIRECT.SYS // 周雅文联系方式</span>
+            </div>
+            <div class="flex items-center gap-1.5" data-inspector-id="html:901e7b20:263">
+                <button onclick="minimizeWindow('win-contact')" class="w-3.5 h-3.5 rounded-full bg-yellow-500/80 hover:bg-yellow-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:264"><i class="fa-solid fa-minus" data-inspector-id="html:901e7b20:265"></i></button>
+                <button onclick="closeWindow('win-contact')" class="w-3.5 h-3.5 rounded-full bg-red-500/80 hover:bg-red-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:266"><i class="fa-solid fa-xmark" data-inspector-id="html:901e7b20:267"></i></button>
+            </div>
+        </div>
+
+        <div class="p-4 space-y-3 text-xs" data-inspector-id="html:901e7b20:268">
+            
+            <div class="text-cyber-muted text-[10px]" data-inspector-id="html:901e7b20:269">感谢您的观看！随时欢迎合作与交流：</div>
+
+            <div class="space-y-2 font-mono" data-inspector-id="html:901e7b20:270">
+                
+                <div class="p-2 bg-black border border-cyber-panelBorder clip-tech-sm flex items-center justify-between" data-inspector-id="html:901e7b20:271">
+                    <div class="flex items-center gap-2 text-white" data-inspector-id="html:901e7b20:272">
+                        <i class="fa-solid fa-phone text-cyber-green" data-inspector-id="html:901e7b20:273"></i>
+                        <span data-inspector-id="html:901e7b20:274">电话 (TEL):</span>
+                    </div>
+                    <span class="text-cyber-green font-bold select-all" data-inspector-id="html:901e7b20:275">18078960716</span>
+                </div>
+
+                <div class="p-2 bg-black border border-cyber-panelBorder clip-tech-sm flex items-center justify-between" data-inspector-id="html:901e7b20:276">
+                    <div class="flex items-center gap-2 text-white" data-inspector-id="html:901e7b20:277">
+                        <i class="fa-solid fa-envelope text-cyber-green" data-inspector-id="html:901e7b20:278"></i>
+                        <span data-inspector-id="html:901e7b20:279">邮箱 (EMAIL):</span>
+                    </div>
+                    <span class="text-cyber-green font-bold select-all text-[11px]" data-inspector-id="html:901e7b20:280">yawenzhou046@gmail.com</span>
+                </div>
+
+                <div class="p-2 bg-black border border-cyber-panelBorder clip-tech-sm flex items-center justify-between" data-inspector-id="html:901e7b20:281">
+                    <div class="flex items-center gap-2 text-white" data-inspector-id="html:901e7b20:282">
+                        <i class="fa-brands fa-weixin text-cyber-green" data-inspector-id="html:901e7b20:283"></i>
+                        <span data-inspector-id="html:901e7b20:284">微信 (WECHAT):</span>
+                    </div>
+                    <span class="text-cyber-green font-bold select-all" data-inspector-id="html:901e7b20:285">urmyonlyerror_11</span>
+                </div>
+
+                <div class="p-2 bg-black border border-cyber-panelBorder clip-tech-sm flex items-center justify-between" data-inspector-id="html:901e7b20:286">
+                    <div class="flex items-center gap-2 text-white" data-inspector-id="html:901e7b20:287">
+                        <i class="fa-solid fa-globe text-cyber-green" data-inspector-id="html:901e7b20:288"></i>
+                        <span data-inspector-id="html:901e7b20:289">个人主页 (WEB):</span>
+                    </div>
+                    <a href="http://www.zhouyawen.com" target="_blank" class="text-cyber-green font-bold hover:underline text-[11px]" data-inspector-id="html:901e7b20:290">www.zhouyawen.com</a>
+                </div>
+
+            </div>
+
+            <div class="bg-cyber-bg border border-cyber-panelBorder p-2.5 rounded text-[11px] text-cyber-dimText text-center" data-inspector-id="html:901e7b20:291">
+                “ 保持对内容与用户心理的敏锐，用深度运营连接更多人 ”
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DRAGGABLE WINDOW 4: MUSIC PLAYER WIDGET -->
+    <div id="win-player" class="draggable-window fixed bottom-16 right-12 w-[92vw] sm:w-[420px] bg-cyber-panel border border-cyber-panelBorder rounded clip-tech-lg flex flex-col shadow-2xl z-20 transition-shadow duration-300" data-inspector-id="html:901e7b20:292" style="z-index: 51; display: none;">
+        <!-- Window Header -->
+        <div class="window-header bg-cyber-header border-b border-cyber-panelBorder px-3 py-2 flex items-center justify-between cursor-move no-select" data-inspector-id="html:901e7b20:293">
+            <div class="flex items-center gap-2 text-xs font-bold text-white" data-inspector-id="html:901e7b20:294">
+                <i class="fa-solid fa-compact-disc text-cyber-green" id="disc-spinner" data-inspector-id="html:901e7b20:295"></i>
+                <span data-inspector-id="html:901e7b20:296">YAWEN_AUDIO_SYNTH.APP // QQ音乐播放器</span>
+            </div>
+            <div class="flex items-center gap-1.5" data-inspector-id="html:901e7b20:297">
+                <button onclick="minimizeWindow('win-player')" class="w-3.5 h-3.5 rounded-full bg-yellow-500/80 hover:bg-yellow-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:298"><i class="fa-solid fa-minus" data-inspector-id="html:901e7b20:299"></i></button>
+                <button onclick="closeWindow('win-player')" class="w-3.5 h-3.5 rounded-full bg-red-500/80 hover:bg-red-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:300"><i class="fa-solid fa-xmark" data-inspector-id="html:901e7b20:301"></i></button>
+            </div>
+        </div>
+
+        <!-- Player Screen & Visualizer -->
+        <div class="p-4 space-y-3" data-inspector-id="html:901e7b20:302">
+            
+            <div class="bg-black border border-cyber-panelBorder p-3 clip-tech-sm flex flex-col items-center justify-center text-center space-y-2 relative" data-inspector-id="html:901e7b20:303">
+                <div class="text-[10px] text-cyber-muted uppercase tracking-widest flex items-center gap-1" data-inspector-id="html:901e7b20:304">
+                    <i class="fa-brands fa-qq text-cyber-green" data-inspector-id="html:901e7b20:305"></i> QQ MUSIC PLAYLIST (5 TRACKS)
+                </div>
+                <div id="player-track-title" class="text-sm font-bold text-cyber-green text-glow truncate max-w-full" data-inspector-id="html:901e7b20:306">NCT 127 - Step Up</div>
+                <div id="player-track-artist" class="text-[10px] text-cyber-dimText" data-inspector-id="html:901e7b20:307">本地音频 (Local MP3)</div>
+                
+                <!-- Audio Equalizer Spectrum Visualizer -->
+                <canvas id="player-spectrum" width="280" height="32" class="w-full h-8 my-1 bg-black/40 rounded" data-inspector-id="html:901e7b20:308"></canvas>
+
+                <!-- Time Progress & Seek Bar -->
+                <div class="w-full space-y-1" data-inspector-id="html:901e7b20:309">
+                    <input type="range" id="player-progress" value="0" min="0" max="100" step="0.1" oninput="seekAudio(this.value)" class="w-full accent-cyber-green h-1 bg-cyber-panelBorder rounded cursor-pointer" data-inspector-id="html:901e7b20:310">
+                    <div class="flex justify-between text-[10px] text-cyber-dimText font-mono" data-inspector-id="html:901e7b20:311">
+                        <span id="player-current-time" data-inspector-id="html:901e7b20:312">00:00</span>
+                        <span id="player-duration" data-inspector-id="html:901e7b20:313">02:40</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Controls -->
+            <div class="flex items-center justify-between px-2 text-cyber-text" data-inspector-id="html:901e7b20:314">
+                <!-- Volume Control -->
+                <div class="flex items-center gap-1 text-cyber-muted text-xs" data-inspector-id="html:901e7b20:315">
+                    <i class="fa-solid fa-volume-high text-[10px]" data-inspector-id="html:901e7b20:316"></i>
+                    <input type="range" id="player-volume" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)" class="w-16 accent-cyber-green h-1 bg-cyber-panelBorder rounded cursor-pointer" data-inspector-id="html:901e7b20:317">
+                </div>
+
+                <!-- Playback Buttons -->
+                <div class="flex items-center gap-3" data-inspector-id="html:901e7b20:318">
+                    <button onclick="prevTrack(); playAudio('click');" class="hover:text-cyber-green text-sm" title="上一首" data-inspector-id="html:901e7b20:319"><i class="fa-solid fa-backward-step" data-inspector-id="html:901e7b20:320"></i></button>
+                    <button onclick="toggleMusicPlay(); playAudio('click');" id="play-btn" class="w-10 h-10 bg-cyber-green text-black rounded-full flex items-center justify-center font-bold hover:bg-emerald-300 shadow-md transition-transform active:scale-95" data-inspector-id="html:901e7b20:321">
+                        <i class="fa-solid fa-play" id="play-icon" data-inspector-id="html:901e7b20:322"></i>
+                    </button>
+                    <button onclick="nextTrack(); playAudio('click');" class="hover:text-cyber-green text-sm" title="下一首" data-inspector-id="html:901e7b20:323"><i class="fa-solid fa-forward-step" data-inspector-id="html:901e7b20:324"></i></button>
+                </div>
+
+                <!-- Upload Local MP3 Option -->
+                <div class="flex items-center gap-2" data-inspector-id="html:901e7b20:325">
+                    <button onclick="document.getElementById('audio-file-input').click()" class="px-2 py-1 bg-cyber-panel border border-cyber-panelBorder hover:border-cyber-green text-cyber-green text-[10px] rounded clip-tech-sm" title="导入本地MP3文件" data-inspector-id="html:901e7b20:326">
+                        <i class="fa-solid fa-upload" data-inspector-id="html:901e7b20:327"></i> 本地MP3
+                    </button>
+                    <input type="file" id="audio-file-input" accept="audio/*" class="hidden" onchange="handleAudioFileUpload(event)" data-inspector-id="html:901e7b20:328">
+                </div>
+            </div>
+
+            <!-- Tracklist -->
+            <div class="border-t border-cyber-panelBorder pt-2" data-inspector-id="html:901e7b20:329">
+                <div class="flex items-center justify-between text-[10px] text-cyber-muted mb-2 font-bold uppercase" data-inspector-id="html:901e7b20:330">
+                    <span data-inspector-id="html:901e7b20:331">播放列表 (已清空)</span>
+                    <button onclick="document.getElementById('audio-file-input').click()" class="text-cyber-green hover:underline flex items-center gap-1" data-inspector-id="html:901e7b20:332">
+                        <i class="fa-solid fa-plus" data-inspector-id="html:901e7b20:333"></i> 导入音乐
+                    </button>
+                </div>
+                
+                <div class="space-y-1.5 text-xs font-mono max-h-40 overflow-y-auto pr-1" id="track-list" data-inspector-id="html:901e7b20:334"><div class="p-2 rounded flex items-center justify-between cursor-pointer transition-all border bg-cyber-bg border-cyber-panelBorder text-cyber-dimText hover:border-cyber-green/50">
+                    <div class="flex items-center gap-2 truncate pr-2" onclick="selectTrack(0)">
+                        <i class="fa-solid fa-music text-cyber-muted text-xs"></i>
+                        <div class="truncate">
+                            <div class="truncate text-xs text-white">1. Ariana Grande - freak (Explicit)</div>
+                            <div class="text-[9px] text-cyber-muted truncate">本地音频 (Local MP3)</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 flex-shrink-0">
+                        <button onclick="renameTrack(0); event.stopPropagation();" class="px-1.5 py-0.5 bg-black border border-cyber-panelBorder hover:border-cyber-green text-[9px] text-cyber-dimText rounded" title="重命名歌名">改名</button>
+                    </div>
+                </div><div class="p-2 rounded flex items-center justify-between cursor-pointer transition-all border bg-cyber-bg border-cyber-panelBorder text-cyber-dimText hover:border-cyber-green/50">
+                    <div class="flex items-center gap-2 truncate pr-2" onclick="selectTrack(1)">
+                        <i class="fa-solid fa-music text-cyber-muted text-xs"></i>
+                        <div class="truncate">
+                            <div class="truncate text-xs text-white">2. 胜宽 - Time Lapse</div>
+                            <div class="text-[9px] text-cyber-muted truncate">本地音频 (Local MP3)</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 flex-shrink-0">
+                        <button onclick="renameTrack(1); event.stopPropagation();" class="px-1.5 py-0.5 bg-black border border-cyber-panelBorder hover:border-cyber-green text-[9px] text-cyber-dimText rounded" title="重命名歌名">改名</button>
+                    </div>
+                </div><div class="p-2 rounded flex items-center justify-between cursor-pointer transition-all border bg-cyber-green/20 border-cyber-green text-cyber-green font-bold">
+                    <div class="flex items-center gap-2 truncate pr-2" onclick="selectTrack(2)">
+                        <i class="fa-solid fa-music text-cyber-muted text-xs"></i>
+                        <div class="truncate">
+                            <div class="truncate text-xs text-white">3. NCT 127 - Step Up</div>
+                            <div class="text-[9px] text-cyber-muted truncate">本地音频 (Local MP3)</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 flex-shrink-0">
+                        <button onclick="renameTrack(2); event.stopPropagation();" class="px-1.5 py-0.5 bg-black border border-cyber-panelBorder hover:border-cyber-green text-[9px] text-cyber-dimText rounded" title="重命名歌名">改名</button>
+                    </div>
+                </div></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DRAGGABLE WINDOW 5: TERMINAL CONSOLE -->
+    <div id="win-terminal" class="draggable-window fixed bottom-10 left-10 w-[90vw] sm:w-[580px] h-[320px] bg-black border border-cyber-green/50 clip-tech-lg flex flex-col shadow-2xl z-20 transition-shadow duration-300" data-inspector-id="html:901e7b20:335" style="z-index: 38; display: none;">
+        <!-- Window Header -->
+        <div class="window-header bg-cyber-header border-b border-cyber-panelBorder px-3 py-2 flex items-center justify-between cursor-move no-select" data-inspector-id="html:901e7b20:336">
+            <div class="flex items-center gap-2 text-xs font-bold text-cyber-green" data-inspector-id="html:901e7b20:337">
+                <i class="fa-solid fa-terminal" data-inspector-id="html:901e7b20:338"></i>
+                <span data-inspector-id="html:901e7b20:339">YAWEN_CLI_CONSOLE.EXE</span>
+            </div>
+            <div class="flex items-center gap-1.5" data-inspector-id="html:901e7b20:340">
+                <button onclick="minimizeWindow('win-terminal')" class="w-3.5 h-3.5 rounded-full bg-yellow-500/80 hover:bg-yellow-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:341"><i class="fa-solid fa-minus" data-inspector-id="html:901e7b20:342"></i></button>
+                <button onclick="closeWindow('win-terminal')" class="w-3.5 h-3.5 rounded-full bg-red-500/80 hover:bg-red-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:343"><i class="fa-solid fa-xmark" data-inspector-id="html:901e7b20:344"></i></button>
+            </div>
+        </div>
+
+        <!-- Terminal Output -->
+        <div class="p-3 flex-1 overflow-y-auto space-y-1.5 text-xs font-mono" id="terminal-output" data-inspector-id="html:901e7b20:345">
+            <div class="text-cyber-muted" data-inspector-id="html:901e7b20:346">ZHOU YAWEN OS CLI Kernel initialized.</div>
+            <div class="text-cyber-green" data-inspector-id="html:901e7b20:347">输入命令 <span class="text-white font-bold" data-inspector-id="html:901e7b20:348">'help'</span> 查看可用战术指令。</div>
+        </div>
+
+        <!-- Input Form -->
+        <form onsubmit="handleCLI(event)" class="border-t border-cyber-panelBorder p-2 bg-black flex items-center gap-2" data-inspector-id="html:901e7b20:349">
+            <span class="text-cyber-green text-xs font-bold pl-1" data-inspector-id="html:901e7b20:350">&gt;</span>
+            <input type="text" id="cli-input" class="bg-transparent text-cyber-text text-xs font-mono focus:outline-none flex-1" placeholder="Type 'help' or 'works', 'about'..." autocomplete="off" data-inspector-id="html:901e7b20:351">
+        </form>
+    </div>
+
+    <!-- DRAGGABLE WINDOW 6: PAINT CANVAS -->
+    <div id="win-paint" class="draggable-window fixed top-20 left-20 w-[90vw] sm:w-[420px] bg-cyber-panel border border-cyber-panelBorder rounded clip-tech-lg flex flex-col shadow-2xl z-20 transition-shadow duration-300 hidden" data-inspector-id="html:901e7b20:352" style="display: none;">
+        <!-- Window Header -->
+        <div class="window-header bg-cyber-header border-b border-cyber-panelBorder px-3 py-2 flex items-center justify-between cursor-move no-select" data-inspector-id="html:901e7b20:353">
+            <div class="flex items-center gap-2 text-xs font-bold text-white" data-inspector-id="html:901e7b20:354">
+                <i class="fa-solid fa-paint-brush text-cyber-green" data-inspector-id="html:901e7b20:355"></i>
+                <span data-inspector-id="html:901e7b20:356">C:\ZHOUYAWEN\PAINT.EXE // 赛博战术画板</span>
+            </div>
+            <div class="flex items-center gap-1.5" data-inspector-id="html:901e7b20:357">
+                <button onclick="minimizeWindow('win-paint')" class="w-3.5 h-3.5 rounded-full bg-yellow-500/80 hover:bg-yellow-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:358"><i class="fa-solid fa-minus" data-inspector-id="html:901e7b20:359"></i></button>
+                <button onclick="closeWindow('win-paint')" class="w-3.5 h-3.5 rounded-full bg-red-500/80 hover:bg-red-400 flex items-center justify-center text-[8px] text-black" data-inspector-id="html:901e7b20:360"><i class="fa-solid fa-xmark" data-inspector-id="html:901e7b20:361"></i></button>
+            </div>
+        </div>
+
+        <div class="p-3 flex flex-col items-center gap-2" data-inspector-id="html:901e7b20:362">
+            <canvas id="paint-canvas" width="380" height="220" class="bg-black border border-cyber-panelBorder rounded cursor-crosshair w-full h-auto max-w-full" data-inspector-id="html:901e7b20:363"></canvas>
+            <div class="flex items-center justify-between w-full text-xs" data-inspector-id="html:901e7b20:364">
+                <span class="text-cyber-muted text-[10px]" data-inspector-id="html:901e7b20:365">点击/拖拽画板像素绘制</span>
+                <button onclick="clearPaint(); playAudio('beep');" class="px-2.5 py-1 bg-cyber-panel border border-cyber-panelBorder hover:border-cyber-green text-cyber-green rounded clip-tech-sm text-[10px]" data-inspector-id="html:901e7b20:366">
+                    <i class="fa-solid fa-eraser" data-inspector-id="html:901e7b20:367"></i> 清空画板
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALLAGI-INSPIRED MINIMAL EDITORIAL SHOWCASE MODAL -->
+    <div id="allagi-modal" class="fixed inset-0 z-[300] bg-[#050806] flex-col overflow-y-auto hidden" data-inspector-id="html:901e7b20:368">
+        <!-- Minimal Header -->
+        <div class="sticky top-0 z-50 bg-[#050806]/90 backdrop-blur-md border-b border-cyber-panelBorder/40" data-inspector-id="html:901e7b20:369">
+            <div class="max-w-7xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-between" data-inspector-id="html:901e7b20:370">
+                <button onclick="closeAllagiModal(); playAudio('click');" class="flex items-center gap-2 text-cyber-dimText hover:text-cyber-green transition-colors text-xs font-mono uppercase tracking-widest" data-inspector-id="html:901e7b20:371">
+                    <i class="fa-solid fa-arrow-left-long" data-inspector-id="html:901e7b20:372"></i>
+                    <span data-inspector-id="html:901e7b20:373">Back to Index</span>
+                </button>
+                <div class="text-cyber-muted text-xs font-mono tracking-widest" id="allagi-index-marker" data-inspector-id="html:901e7b20:374">05 / 05</div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 py-10 sm:py-16 flex-1" data-inspector-id="html:901e7b20:375">
+            <!-- Title Block -->
+            <div class="mb-12 sm:mb-20" data-inspector-id="html:901e7b20:376">
+                <div class="flex items-center gap-3 mb-4" data-inspector-id="html:901e7b20:377">
+                    <span id="allagi-category-pill" class="text-cyber-green text-xs font-mono uppercase tracking-[0.2em]" data-inspector-id="html:901e7b20:378">PART 3 // 摄影纪实</span>
+                    <span class="text-cyber-panelBorder" data-inspector-id="html:901e7b20:379">/</span>
+                    <span id="allagi-timeline-tag" class="text-cyber-muted text-xs font-mono tracking-widest" data-inspector-id="html:901e7b20:380">2024-2026 ARCHIVE</span>
+                </div>
+                <h1 id="allagi-title" class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.1] mb-6" data-inspector-id="html:901e7b20:381">活动现场与生活纪实摄影作品集</h1>
+                <p id="allagi-desc" class="text-sm sm:text-base text-cyber-dimText leading-relaxed max-w-2xl font-sans" data-inspector-id="html:901e7b20:382">包含百人粉丝活动现场抓拍、学院会议影像记录以及日常纪实写真。擅长色彩后调与画面情感渲染，具备良好的光影捕捉与画面构图感知。</p>
+                <div class="flex flex-wrap gap-2 mt-6" id="allagi-tags" data-inspector-id="html:901e7b20:383"><span class="px-2.5 py-1 bg-cyber-panel border border-cyber-panelBorder/60 text-cyber-green text-[10px] font-mono tracking-wider">摄影构图</span><span class="px-2.5 py-1 bg-cyber-panel border border-cyber-panelBorder/60 text-cyber-green text-[10px] font-mono tracking-wider">Lightroom/PS后期</span><span class="px-2.5 py-1 bg-cyber-panel border border-cyber-panelBorder/60 text-cyber-green text-[10px] font-mono tracking-wider">现场抓拍</span></div>
+            </div>
+
+            <!-- Hero Image -->
+            <div class="mb-16 sm:mb-24" data-inspector-id="html:901e7b20:384">
+                <div class="relative w-full aspect-[16/9] sm:aspect-[21/9] bg-cyber-panel overflow-hidden group" data-inspector-id="html:901e7b20:385">
+                    <img id="allagi-featured-img" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Featured" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.02]" data-inspector-id="html:901e7b20:386">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" data-inspector-id="html:901e7b20:387"></div>
+                </div>
+            </div>
+
+            <!-- Gallery Grid (Allagi minimal style) -->
+            <div class="mb-16 sm:mb-24" data-inspector-id="html:901e7b20:388">
+                <div class="flex items-center justify-between mb-6" data-inspector-id="html:901e7b20:389">
+                    <h2 class="text-xs font-mono uppercase tracking-[0.2em] text-cyber-muted" data-inspector-id="html:901e7b20:390">Selected Works</h2>
+                    <span class="text-[10px] text-cyber-dimText font-mono" id="allagi-gallery-count" data-inspector-id="html:901e7b20:391">02 images</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6" id="allagi-gallery-grid" data-inspector-id="html:901e7b20:392"><div class="relative group cursor-pointer overflow-hidden bg-cyber-panel">
+                    <div class="aspect-[4/3] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&amp;fit=crop&amp;w=800&amp;q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-12 h-12 rounded-full border border-white/40 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                            <i class="fa-solid fa-expand text-white/90 text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-3 left-3 text-[10px] text-white/70 font-mono tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                        01 / 02
+                    </div>
+                </div><div class="relative group cursor-pointer overflow-hidden bg-cyber-panel">
+                    <div class="aspect-[4/3] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&amp;fit=crop&amp;w=800&amp;q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-12 h-12 rounded-full border border-white/40 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                            <i class="fa-solid fa-expand text-white/90 text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-3 left-3 text-[10px] text-white/70 font-mono tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                        02 / 02
+                    </div>
+                </div></div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="border-t border-cyber-panelBorder/40 pt-8 flex items-center justify-between" data-inspector-id="html:901e7b20:393">
+                <button onclick="prevAllagiDetail(); playAudio('click');" class="group flex items-center gap-3 text-cyber-dimText hover:text-cyber-green transition-colors" data-inspector-id="html:901e7b20:394">
+                    <i class="fa-solid fa-arrow-left-long text-sm group-hover:-translate-x-1 transition-transform" data-inspector-id="html:901e7b20:395"></i>
+                    <div class="text-left" data-inspector-id="html:901e7b20:396">
+                        <div class="text-[10px] font-mono uppercase tracking-widest text-cyber-muted" data-inspector-id="html:901e7b20:397">Previous</div>
+                        <div class="text-xs sm:text-sm font-bold" id="allagi-prev-title" data-inspector-id="html:901e7b20:398">周边应援与长图物料设计 SET</div>
+                    </div>
+                </button>
+                <button onclick="nextAllagiDetail(); playAudio('click');" class="group flex items-center gap-3 text-cyber-dimText hover:text-cyber-green transition-colors" data-inspector-id="html:901e7b20:399">
+                    <div class="text-right" data-inspector-id="html:901e7b20:400">
+                        <div class="text-[10px] font-mono uppercase tracking-widest text-cyber-muted" data-inspector-id="html:901e7b20:401">Next</div>
+                        <div class="text-xs sm:text-sm font-bold" id="allagi-next-title" data-inspector-id="html:901e7b20:402">小红书垂直兴趣内容账号运营</div>
+                    </div>
+                    <i class="fa-solid fa-arrow-right-long text-sm group-hover:translate-x-1 transition-transform" data-inspector-id="html:901e7b20:403"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox for full-size image viewing -->
+    <div id="allagi-lightbox" class="fixed inset-0 z-[400] bg-black/95 hidden items-center justify-center" onclick="closeLightbox()" data-inspector-id="html:901e7b20:404">
+        <button class="absolute top-6 right-6 text-white/60 hover:text-white text-2xl z-10 w-10 h-10 flex items-center justify-center" onclick="closeLightbox()" data-inspector-id="html:901e7b20:405">
+            <i class="fa-solid fa-xmark" data-inspector-id="html:901e7b20:406"></i>
+        </button>
+        <button class="absolute left-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-2xl z-10 w-10 h-10 flex items-center justify-center" onclick="event.stopPropagation(); lightboxNav(-1)" data-inspector-id="html:901e7b20:407">
+            <i class="fa-solid fa-chevron-left" data-inspector-id="html:901e7b20:408"></i>
+        </button>
+        <button class="absolute right-6 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-2xl z-10 w-10 h-10 flex items-center justify-center" onclick="event.stopPropagation(); lightboxNav(1)" data-inspector-id="html:901e7b20:409">
+            <i class="fa-solid fa-chevron-right" data-inspector-id="html:901e7b20:410"></i>
+        </button>
+        <img id="lightbox-img" src="" class="max-w-[90vw] max-h-[85vh] object-contain" onclick="event.stopPropagation()" data-inspector-id="html:901e7b20:411">
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 text-xs font-mono tracking-widest" id="lightbox-counter" data-inspector-id="html:901e7b20:412">1 / 2</div>
+    </div>
+
+    <!-- Core Application Logic -->
+    <script>
+        // Web Audio Synthesizer Engine
+        let audioCtx = null;
+        let audioEnabled = true;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playAudio(type) {
+            if (!audioEnabled) return;
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'hover') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.04);
+                    gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.04);
+                } else if (type === 'click') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(280, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(140, audioCtx.currentTime + 0.06);
+                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.06);
+                } else if (type === 'beep') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.08);
+                }
+            } catch (e) {
+                console.log('Audio error');
+            }
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            document.getElementById('audio-status').innerText = audioEnabled ? 'SFX:ON' : 'SFX:OFF';
+            document.getElementById('audio-icon').className = audioEnabled ? 'fa-solid fa-volume-high mr-1' : 'fa-solid fa-volume-xmark mr-1';
+        }
+
+        function toggleScanlines() {
+            document.getElementById('body-tag').classList.toggle('scanline-active');
+        }
+
+        // Avatar Upload Handler for Live Preview
+        function handleAvatarUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatarImg = document.getElementById('user-avatar-img');
+                    if (avatarImg) {
+                        avatarImg.src = e.target.result;
+                        playAudio('beep');
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Work Image Upload Handler for Portfolio Cards
+        function handleWorkImageUpload(event, targetImgId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgEl = document.getElementById(targetImgId);
+                    if (imgEl) {
+                        imgEl.src = e.target.result;
+                        playAudio('beep');
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Multi-image Upload Handler for Part 3, Part 4, Part 5
+        function handleMultiWorkImageUpload(event, galleryId) {
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
+
+            const galleryContainer = document.getElementById(galleryId);
+            if (!galleryContainer) return;
+
+            galleryContainer.innerHTML = ''; // 清空之前的默认预览图
+
+            // 根据上传图片数量自适应网格布局（1张全屏、2张双排、3张及以上多宫格）
+            if (files.length === 1) {
+                galleryContainer.className = "w-full h-full grid grid-cols-1 p-1";
+            } else if (files.length === 2) {
+                galleryContainer.className = "w-full h-full grid grid-cols-2 gap-1 p-1";
+            } else if (files.length === 3 || files.length === 4) {
+                galleryContainer.className = "w-full h-full grid grid-cols-2 gap-1 p-1";
+            } else {
+                galleryContainer.className = "w-full h-full grid grid-cols-3 gap-1 p-1";
+            }
+
+            files.forEach((file) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-full h-full object-cover rounded border border-cyber-panelBorder/50 opacity-90 hover:opacity-100 transition-opacity';
+                    galleryContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            playAudio('beep');
+        }
+
+        function dismissBoot() {
+            const screen = document.getElementById('boot-screen');
+            screen.style.opacity = '0';
+            screen.style.transition = 'opacity 0.4s ease';
+            setTimeout(() => { screen.style.display = 'none'; }, 400);
+            playAudio('beep');
+        }
+
+        // Draggable Window Manager System
+        let highestZIndex = 30;
+
+        function makeWindowDraggable(win) {
+            const header = win.querySelector('.window-header');
+            let isDragging = false;
+            let offsetX = 0, offsetY = 0;
+
+            win.addEventListener('mousedown', () => bringToFront(win));
+
+            if (!header) return;
+
+            header.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                offsetX = e.clientX - win.offsetLeft;
+                offsetY = e.clientY - win.offsetTop;
+                bringToFront(win);
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                win.style.left = `${Math.max(0, Math.min(window.innerWidth - win.offsetWidth, e.clientX - offsetX))}px`;
+                win.style.top = `${Math.max(40, Math.min(window.innerHeight - win.offsetHeight - 40, e.clientY - offsetY))}px`;
+            });
+
+            document.addEventListener('mouseup', () => { isDragging = false; });
+
+            // Touch events for mobile
+            header.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                const touch = e.touches[0];
+                offsetX = touch.clientX - win.offsetLeft;
+                offsetY = touch.clientY - win.offsetTop;
+                bringToFront(win);
+            }, { passive: true });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const touch = e.touches[0];
+                win.style.left = `${Math.max(0, Math.min(window.innerWidth - win.offsetWidth, touch.clientX - offsetX))}px`;
+                win.style.top = `${Math.max(40, Math.min(window.innerHeight - win.offsetHeight - 40, touch.clientY - offsetY))}px`;
+            }, { passive: true });
+
+            document.addEventListener('touchend', () => { isDragging = false; });
+        }
+
+        function bringToFront(win) {
+            document.querySelectorAll('.draggable-window').forEach(w => w.classList.remove('window-active'));
+            highestZIndex += 1;
+            win.style.zIndex = highestZIndex;
+            win.classList.add('window-active');
+            updateDock();
+        }
+
+        function openWindow(winId) {
+            const win = document.getElementById(winId);
+            if (win) {
+                win.style.display = 'flex';
+                bringToFront(win);
+            }
+        }
+
+        function closeWindow(winId) {
+            const win = document.getElementById(winId);
+            if (win) {
+                win.style.display = 'none';
+                updateDock();
+            }
+        }
+
+        function minimizeWindow(winId) {
+            closeWindow(winId);
+        }
+
+        function updateDock() {
+            const dock = document.getElementById('dock-windows');
+            dock.innerHTML = '';
+            
+            const windows = [
+                { id: 'win-works', name: '作品集', icon: 'fa-folder-open' },
+                { id: 'win-about', name: '个人资料', icon: 'fa-id-card' },
+                { id: 'win-contact', name: '联系方式', icon: 'fa-address-book' },
+                { id: 'win-player', name: '音乐', icon: 'fa-compact-disc' },
+                { id: 'win-terminal', name: '终端', icon: 'fa-terminal' },
+                { id: 'win-paint', name: '画板', icon: 'fa-paint-brush' }
+            ];
+
+            windows.forEach(w => {
+                const el = document.getElementById(w.id);
+                if (el && el.style.display !== 'none') {
+                    const btn = document.createElement('button');
+                    btn.className = `px-2.5 py-1 bg-cyber-panel border border-cyber-panelBorder hover:border-cyber-green text-cyber-text text-[10px] rounded flex items-center gap-1.5 ${el.classList.contains('window-active') ? 'border-cyber-green text-cyber-green font-bold' : ''}`;
+                    btn.innerHTML = `<i class="fa-solid ${w.icon}"></i> ${w.name}`;
+                    btn.onclick = () => {
+                        if (el.classList.contains('window-active')) {
+                            minimizeWindow(w.id);
+                        } else {
+                            openWindow(w.id);
+                        }
+                    };
+                    dock.appendChild(btn);
+                }
+            });
+        }
+
+        // Works Filtering logic
+        function filterWorks(category, btn) {
+            document.querySelectorAll('#works-filter .filter-btn').forEach(b => {
+                b.className = 'filter-btn px-2.5 py-1 text-[10px] bg-cyber-panel border border-cyber-panelBorder text-cyber-muted hover:text-cyber-green clip-tech-sm';
+            });
+            btn.className = 'filter-btn active px-2.5 py-1 text-[10px] bg-cyber-green text-black font-bold clip-tech-sm';
+
+            document.querySelectorAll('#works-grid .work-card').forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function inspectProject(title, desc, tech, img) {
+            const screen = document.getElementById('terminal-output');
+            const div = document.createElement('div');
+            div.className = 'text-cyber-green border-l-2 border-cyber-green pl-2 py-1 my-1 bg-cyber-panelBorder/30';
+            div.innerHTML = `<strong>[项目检视] ${title}</strong><br>${desc}<br><span class="text-white">核心标签/技能: ${tech}</span>`;
+            screen.appendChild(div);
+            screen.scrollTop = screen.scrollHeight;
+
+            // Trigger Modal Lightbox
+            const modal = document.getElementById('project-modal');
+            if (modal) {
+                document.getElementById('modal-title').innerText = title;
+                document.getElementById('modal-desc').innerText = desc;
+                document.getElementById('modal-tech').innerText = tech;
+                
+                const modalImg = document.getElementById('modal-img');
+                if (img && img.trim() !== '') {
+                    modalImg.src = img;
+                    modalImg.style.display = 'block';
+                } else {
+                    modalImg.style.display = 'none';
+                }
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeProjectModal() {
+            const modal = document.getElementById('project-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function changeImageByUrl(targetImgId) {
+            const url = prompt('请输入/粘贴图片的网络链接 (URL):');
+            if (url && url.trim()) {
+                const img = document.getElementById(targetImgId);
+                if (img) {
+                    img.src = url.trim();
+                    playAudio('beep');
+                }
+            }
+        }
+
+        // CLI Terminal Logic
+        function handleCLI(e) {
+            e.preventDefault();
+            const input = document.getElementById('cli-input');
+            const output = document.getElementById('terminal-output');
+            const cmd = input.value.trim().toLowerCase();
+
+            if (!cmd) return;
+
+            const echo = document.createElement('div');
+            echo.className = 'text-white font-bold';
+            echo.innerHTML = `<span class="text-cyber-green">yawen@portfolio:~$</span> ${cmd}`;
+            output.appendChild(echo);
+
+            const res = document.createElement('div');
+            res.className = 'text-cyber-dimText mb-2';
+
+            switch (cmd) {
+                case 'help':
+                    res.innerHTML = `可用指令:<br>- <span class="text-cyber-green">works</span> : 打开周雅文作品集<br>- <span class="text-cyber-green">about</span> : 查看个人简历与三大能力<br>- <span class="text-cyber-green">contact</span> : 显示周雅文联系方式<br>- <span class="text-cyber-green">clear</span> : 清屏`;
+                    break;
+                case 'works':
+                    openWindow('win-works');
+                    res.innerHTML = '正在打开 C:\\ZHOUYAWEN\\WORKS_PORTFOLIO...';
+                    break;
+                case 'about':
+                    openWindow('win-about');
+                    res.innerHTML = '正在载入周雅文个人档案...';
+                    break;
+                case 'contact':
+                    openWindow('win-contact');
+                    res.innerHTML = '显示联系方式: TEL 18078960716 | yawenzhou046@gmail.com';
+                    break;
+                case 'clear':
+                    output.innerHTML = '';
+                    input.value = '';
+                    return;
+                default:
+                    res.innerHTML = `<span class="text-red-400">未知指令 '${cmd}'. 请输入 'help'。</span>`;
+            }
+
+            output.appendChild(res);
+            output.scrollTop = output.scrollHeight;
+            input.value = '';
+            playAudio('beep');
+        }
+
+        // Simple Pixel Paint Canvas
+        const pCanvas = document.getElementById('paint-canvas');
+        const pCtx = pCanvas ? pCanvas.getContext('2d') : null;
+        let isPainting = false;
+
+        if (pCanvas && pCtx) {
+            pCanvas.addEventListener('mousedown', () => isPainting = true);
+            pCanvas.addEventListener('mouseup', () => isPainting = false);
+            pCanvas.addEventListener('mouseleave', () => isPainting = false);
+            pCanvas.addEventListener('mousemove', (e) => {
+                if (!isPainting) return;
+                const rect = pCanvas.getBoundingClientRect();
+                const scaleX = pCanvas.width / rect.width;
+                const scaleY = pCanvas.height / rect.height;
+                const x = (e.clientX - rect.left) * scaleX;
+                const y = (e.clientY - rect.top) * scaleY;
+                pCtx.fillStyle = '#00ff66';
+                pCtx.fillRect(Math.floor(x / 8) * 8, Math.floor(y / 8) * 8, 8, 8);
+            });
+        }
+
+        function clearPaint() {
+            if (pCanvas && pCtx) {
+                pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            }
+        }
+
+        // Particle Canvas Background Animation
+        const bgCanvas = document.getElementById('canvas-bg');
+        const bgCtx = bgCanvas.getContext('2d');
+        let bgW, bgH, particles = [];
+
+        function resizeBg() {
+            bgW = bgCanvas.width = window.innerWidth;
+            bgH = bgCanvas.height = window.innerHeight;
+        }
+
+        class BgParticle {
+            constructor() {
+                this.x = Math.random() * bgW;
+                this.y = Math.random() * bgH;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > bgW) this.vx *= -1;
+                if (this.y < 0 || this.y > bgH) this.vy *= -1;
+            }
+            draw() {
+                bgCtx.fillStyle = '#00ff66';
+                bgCtx.beginPath();
+                bgCtx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+                bgCtx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 40; i++) particles.push(new BgParticle());
+        }
+
+        function animateBg() {
+            bgCtx.clearRect(0, 0, bgW, bgH);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateBg);
+        }
+
+        // Realtime Clock Update Logic
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            document.getElementById('top-clock').innerText = `${timeStr} JST`;
+        }
+
+        // Audio Player Engine & QQ Music Playlist Logic (清空预设曲目)
+        let tracks = [];
+
+        let currentTrack = 0;
+        let isPlaying = false;
+        let audioPlayer = new Audio();
+        let synthInterval = null;
+        let isSynthFallback = false;
+
+        function initPlayer() {
+            renderTrackList();
+            if (tracks.length > 0) {
+                loadTrack(0);
+            } else {
+                document.getElementById('player-track-title').innerText = '等待导入音乐';
+                document.getElementById('player-track-artist').innerText = '点击【导入音乐】添加 MP3';
+            }
+
+            audioPlayer.addEventListener('timeupdate', updatePlayerProgress);
+            audioPlayer.addEventListener('ended', nextTrack);
+            audioPlayer.addEventListener('error', handleAudioError);
+        }
+
+        function renderTrackList() {
+            const listEl = document.getElementById('track-list');
+            if (!listEl) return;
+            
+            listEl.innerHTML = '';
+
+            if (tracks.length === 0) {
+                listEl.innerHTML = `
+                    <div class="p-3 bg-cyber-bg border border-cyber-panelBorder rounded text-center text-cyber-muted text-[11px] space-y-2">
+                        <div>播放列表当前为空</div>
+                        <button onclick="document.getElementById('audio-file-input').click()" class="px-3 py-1 bg-cyber-green text-black font-bold rounded clip-tech-sm hover:bg-emerald-300 text-xs">
+                            <i class="fa-solid fa-upload"></i> 点击选择本地 MP3 文件
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            tracks.forEach((t, index) => {
+                const item = document.createElement('div');
+                const isSelected = index === currentTrack;
+                item.className = `p-2 rounded flex items-center justify-between cursor-pointer transition-all border ${
+                    isSelected ? 'bg-cyber-green/20 border-cyber-green text-cyber-green font-bold' : 'bg-cyber-bg border-cyber-panelBorder text-cyber-dimText hover:border-cyber-green/50'
+                }`;
+                
+                item.innerHTML = `
+                    <div class="flex items-center gap-2 truncate pr-2" onclick="selectTrack(${index})">
+                        <i class="fa-solid ${isSelected && isPlaying ? 'fa-volume-high text-cyber-green animate-pulse' : 'fa-music text-cyber-muted'} text-xs"></i>
+                        <div class="truncate">
+                            <div class="truncate text-xs text-white">${index + 1}. ${t.title}</div>
+                            <div class="text-[9px] text-cyber-muted truncate">${t.artist}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 flex-shrink-0">
+                        <button onclick="renameTrack(${index}); event.stopPropagation();" class="px-1.5 py-0.5 bg-black border border-cyber-panelBorder hover:border-cyber-green text-[9px] text-cyber-dimText rounded" title="重命名歌名">改名</button>
+                    </div>
+                `;
+                listEl.appendChild(item);
+            });
+        }
+
+        function loadTrack(index) {
+            if (tracks.length === 0) return;
+            currentTrack = index;
+            const t = tracks[currentTrack];
+            
+            document.getElementById('player-track-title').innerText = t.title;
+            document.getElementById('player-track-artist').innerText = t.artist;
+            
+            stopSynthFallback();
+            isSynthFallback = false;
+
+            if (t.src) {
+                audioPlayer.src = t.src;
+                audioPlayer.load();
+            } else {
+                startSynthFallback();
+            }
+
+            renderTrackList();
+        }
+
+        function toggleMusicPlay() {
+            if (tracks.length === 0) {
+                document.getElementById('audio-file-input').click();
+                return;
+            }
+            if (isPlaying) {
+                pauseMusic();
+            } else {
+                playMusic();
+            }
+        }
+
+        function playMusic() {
+            isPlaying = true;
+            document.getElementById('play-icon').className = 'fa-solid fa-pause';
+            const spinner = document.getElementById('disc-spinner');
+            if (spinner) spinner.classList.add('animate-spin');
+
+            if (isSynthFallback) {
+                startSynthFallback();
+            } else {
+                audioPlayer.play().catch(err => {
+                    console.log('Audio autoplay blocked or CORS error, switching to procedural synth engine');
+                    startSynthFallback();
+                });
+            }
+            renderTrackList();
+        }
+
+        function pauseMusic() {
+            isPlaying = false;
+            document.getElementById('play-icon').className = 'fa-solid fa-play';
+            const spinner = document.getElementById('disc-spinner');
+            if (spinner) spinner.classList.remove('animate-spin');
+
+            if (isSynthFallback) {
+                stopSynthFallback();
+            } else {
+                audioPlayer.pause();
+            }
+            renderTrackList();
+        }
+
+        function selectTrack(index) {
+            loadTrack(index);
+            playMusic();
+        }
+
+        function nextTrack() {
+            selectTrack((currentTrack + 1) % tracks.length);
+        }
+
+        function prevTrack() {
+            selectTrack((currentTrack - 1 + tracks.length) % tracks.length);
+        }
+
+        function updatePlayerProgress() {
+            if (isSynthFallback || !audioPlayer.duration) return;
+            const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            const progInput = document.getElementById('player-progress');
+            if (progInput) progInput.value = progress;
+
+            document.getElementById('player-current-time').innerText = formatTime(audioPlayer.currentTime);
+            document.getElementById('player-duration').innerText = formatTime(audioPlayer.duration);
+
+            drawSpectrum();
+        }
+
+        function seekAudio(percent) {
+            if (isSynthFallback || !audioPlayer.duration) return;
+            audioPlayer.currentTime = (percent / 100) * audioPlayer.duration;
+        }
+
+        function setVolume(val) {
+            audioPlayer.volume = val;
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '00:00';
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function handleAudioError() {
+            console.log('Network audio stream failed. Activating Web Audio procedural synth fallback.');
+            startSynthFallback();
+        }
+
+        // Web Audio Procedural Sound Engine (Guarantees sound can ALWAYS play)
+        function startSynthFallback() {
+            isSynthFallback = true;
+            stopSynthFallback();
+
+            let synthStep = 0;
+            synthInterval = setInterval(() => {
+                if (!isPlaying) return;
+                try {
+                    initAudio();
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    const baseFreq = tracks[currentTrack].synthFreq || 220;
+                    const notes = [0, 4, 7, 11, 12, 7, 4];
+                    const noteOffset = notes[synthStep % notes.length];
+                    const freq = baseFreq * Math.pow(2, noteOffset / 12);
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.35);
+
+                    synthStep++;
+                    
+                    // Mock progress time
+                    const fakeSec = (synthStep * 0.4) % 180;
+                    document.getElementById('player-current-time').innerText = formatTime(fakeSec);
+                    document.getElementById('player-duration').innerText = '03:00';
+                    document.getElementById('player-progress').value = (fakeSec / 180) * 100;
+
+                    drawSpectrum();
+                } catch (e) {}
+            }, 400);
+        }
+
+        function stopSynthFallback() {
+            if (synthInterval) {
+                clearInterval(synthInterval);
+                synthInterval = null;
+            }
+        }
+
+        // Audio Equalizer Spectrum Visualizer Effect
+        function drawSpectrum() {
+            const canvas = document.getElementById('player-spectrum');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const bars = 24;
+            const barWidth = canvas.width / bars;
+
+            for (let i = 0; i < bars; i++) {
+                const height = isPlaying ? Math.random() * (canvas.height - 4) + 4 : 2;
+                ctx.fillStyle = '#00ff66';
+                ctx.fillRect(i * barWidth + 1, canvas.height - height, barWidth - 2, height);
+            }
+        }
+
+        // Handle Custom Audio Upload (Local MP3 File)
+        function handleAudioFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileUrl = URL.createObjectURL(file);
+                const customTrack = {
+                    id: tracks.length + 1,
+                    title: file.name.replace(/\.[^/.]+$/, ""),
+                    artist: '本地音频 (Local MP3)',
+                    src: fileUrl,
+                    synthFreq: 440
+                };
+                tracks.push(customTrack);
+                selectTrack(tracks.length - 1);
+                playAudio('beep');
+            }
+        }
+
+        // ==========================================
+        // ALLAGI EDITORIAL SHOWCASE ENGINE (NEW)
+        // ==========================================
+        const allagiProjects = [
+            {
+                id: 0,
+                category: "PART 1 // 账号运营",
+                timeline: "2025-2026 RELEASE",
+                title: "小红书垂直兴趣内容账号运营",
+                desc: "围绕偶像节点与粉丝审美需求，从0到1搭建账号“橘子猫冰美式”。3个月持续运营产出100+原创作品，掌握节点洞察、选题策划、视觉生产与数据复盘全流程，单篇最高赞藏4K+。",
+                tags: ["小红书运营", "PS/AI排版", "选题策划", "流量复盘"],
+                galleryId: "work-gallery-1",
+                subImages: [
+                    "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?auto=format&fit=crop&w=800&q=80"
+                ]
+            },
+            {
+                id: 1,
+                category: "PART 1 // 官方媒体",
+                timeline: "2024-2025 RELEASE",
+                title: "学院官方公众号内容运营与采风",
+                desc: "服务于西安科技大学安全学院团委网新中心编辑部。负责官方公众号选题策划、图文编辑与秀米排版，配合活动节点产出推文（军训心得、假期归来分享会等）。负责现场摄影记录，具备快速图文产出能力。",
+                tags: ["秀米排版", "新闻摄影", "官方文案", "图文采编"],
+                galleryId: "work-gallery-2",
+                subImages: [
+                    "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80"
+                ]
+            },
+            {
+                id: 2,
+                category: "PART 2 // 视觉设计",
+                timeline: "2024-2026 CONCEPT",
+                title: "人物与明星概念海报设计选集",
+                desc: "具备扎实的PS/AI设计能力与个人审美体系。涵盖多种审美语境下的合成与排版，例如暗黑赛博风格《THE SAVANISH》、电影怀旧风格《Ordinary Love》以及唯美雪景《Waiting for u》等。",
+                tags: ["Photoshop", "Illustrator", "视觉合成", "字体排版"],
+                galleryId: "work-gallery-3",
+                subImages: [
+                    "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"
+                ]
+            },
+            {
+                id: 3,
+                category: "PART 2 // 周边衍生",
+                timeline: "2025-2026 PRODUCTION",
+                title: "周边应援与长图物料设计 SET",
+                desc: "设计包括：毛巾手幅设计、金属徽章设计、大王扇设计、行李飘带设计、杜邦纸袋设计以及长公告（Set物料宣发图）设计。熟知物料印制规范与粉丝群体审美期待。",
+                tags: ["物料延展", "印刷制版", "扇面设计", "宣传长图"],
+                galleryId: "work-gallery-4",
+                subImages: [
+                    "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=800&q=80"
+                ]
+            },
+            {
+                id: 4,
+                category: "PART 3 // 摄影纪实",
+                timeline: "2024-2026 ARCHIVE",
+                title: "活动现场与生活纪实摄影作品集",
+                desc: "包含百人粉丝活动现场抓拍、学院会议影像记录以及日常纪实写真。擅长色彩后调与画面情感渲染，具备良好的光影捕捉与画面构图感知。",
+                tags: ["摄影构图", "Lightroom/PS后期", "现场抓拍"],
+                galleryId: "work-gallery-5",
+                subImages: [
+                    "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=800&q=80"
+                ]
+            }
+        ];
+
+        let currentAllagiIndex = 0;
+        let currentGalleryImages = [];
+        let currentLightboxIndex = 0;
+
+        function openAllagiDetail(index) {
+            currentAllagiIndex = index;
+            const project = allagiProjects[index];
+            const modal = document.getElementById('allagi-modal');
+            if (!modal) return;
+
+            document.getElementById('allagi-category-pill').innerText = project.category;
+            document.getElementById('allagi-index-marker').innerText = `0${project.id + 1} / 0${allagiProjects.length}`;
+            document.getElementById('allagi-timeline-tag').innerText = project.timeline;
+            document.getElementById('allagi-title').innerText = project.title;
+            document.getElementById('allagi-desc').innerText = project.desc;
+
+            // Render tags
+            const tagsContainer = document.getElementById('allagi-tags');
+            tagsContainer.innerHTML = '';
+            project.tags.forEach(t => {
+                const tag = document.createElement('span');
+                tag.className = 'px-2.5 py-1 bg-cyber-panel border border-cyber-panelBorder/60 text-cyber-green text-[10px] font-mono tracking-wider';
+                tag.innerText = t;
+                tagsContainer.appendChild(tag);
+            });
+
+            // Retrieve dynamically uploaded images from card gallery
+            let displayImages = [...project.subImages];
+            if (project.galleryId) {
+                const galleryEl = document.getElementById(project.galleryId);
+                if (galleryEl) {
+                    const imgs = galleryEl.querySelectorAll('img');
+                    if (imgs.length > 0) {
+                        displayImages = Array.from(imgs).map(img => img.src);
+                    }
+                }
+            }
+
+            currentGalleryImages = displayImages;
+
+            // Set hero image
+            const featImg = document.getElementById('allagi-featured-img');
+            featImg.src = displayImages[0] || 'https://placehold.co/800x450/0c120e/00ff66?text=NO+IMAGE';
+
+            // Update gallery count
+            document.getElementById('allagi-gallery-count').innerText = `${String(displayImages.length).padStart(2, '0')} images`;
+
+            // Render gallery grid (Allagi minimal style - click to enlarge)
+            const galleryGrid = document.getElementById('allagi-gallery-grid');
+            galleryGrid.innerHTML = '';
+            displayImages.forEach((imgUrl, i) => {
+                const item = document.createElement('div');
+                item.className = 'relative group cursor-pointer overflow-hidden bg-cyber-panel';
+                item.onclick = () => { openLightbox(i); playAudio('click'); };
+                item.innerHTML = `
+                    <div class="aspect-[4/3] overflow-hidden">
+                        <img src="${imgUrl}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-12 h-12 rounded-full border border-white/40 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                            <i class="fa-solid fa-expand text-white/90 text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-3 left-3 text-[10px] text-white/70 font-mono tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                        ${String(i + 1).padStart(2, '0')} / ${String(displayImages.length).padStart(2, '0')}
+                    </div>
+                `;
+                galleryGrid.appendChild(item);
+            });
+
+            // Update prev/next titles
+            const prevIdx = (index - 1 + allagiProjects.length) % allagiProjects.length;
+            const nextIdx = (index + 1) % allagiProjects.length;
+            document.getElementById('allagi-prev-title').innerText = allagiProjects[prevIdx].title;
+            document.getElementById('allagi-next-title').innerText = allagiProjects[nextIdx].title;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAllagiModal() {
+            const modal = document.getElementById('allagi-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            document.body.style.overflow = '';
+        }
+
+        // Lightbox functions
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            updateLightboxImage();
+            const lb = document.getElementById('allagi-lightbox');
+            lb.classList.remove('hidden');
+            lb.classList.add('flex');
+        }
+
+        function closeLightbox() {
+            const lb = document.getElementById('allagi-lightbox');
+            lb.classList.add('hidden');
+            lb.classList.remove('flex');
+        }
+
+        function lightboxNav(dir) {
+            currentLightboxIndex = (currentLightboxIndex + dir + currentGalleryImages.length) % currentGalleryImages.length;
+            updateLightboxImage();
+            playAudio('click');
+        }
+
+        function updateLightboxImage() {
+            document.getElementById('lightbox-img').src = currentGalleryImages[currentLightboxIndex];
+            document.getElementById('lightbox-counter').innerText = `${currentLightboxIndex + 1} / ${currentGalleryImages.length}`;
+        }
+
+        function nextAllagiDetail() {
+            const nextIdx = (currentAllagiIndex + 1) % allagiProjects.length;
+            openAllagiDetail(nextIdx);
+        }
+
+        function prevAllagiDetail() {
+            const prevIdx = (currentAllagiIndex - 1 + allagiProjects.length) % allagiProjects.length;
+            openAllagiDetail(prevIdx);
+        }
+
+        // Initialization on Load
+        window.onload = function() {
+            resizeBg();
+            initParticles();
+            animateBg();
+
+            // Make all windows draggable
+            document.querySelectorAll('.draggable-window').forEach(makeWindowDraggable);
+
+            // Open primary windows (disabled - clean desktop launcher view)
+            // openWindow('win-about');
+            // openWindow('win-works');
+            // openWindow('win-player');
+
+            initPlayer();
+
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            window.addEventListener('resize', resizeBg);
+            
+            // Auto dismiss boot sequence after 2.2 seconds
+            setTimeout(dismissBoot, 2200);
+        };
+
+        // Export current page state (including uploaded base64 images) as HTML file
+        function exportCurrentPage() {
+            try {
+                var doctype = '<!DOCTYPE html>';
+                var clonedHtml = document.documentElement.cloneNode(true);
+                var modal = clonedHtml.querySelector('#allagi-modal');
+                if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+                var lightbox = clonedHtml.querySelector('#allagi-lightbox');
+                if (lightbox) { lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); }
+                var wins = clonedHtml.querySelectorAll('.draggable-window');
+                for (var i = 0; i < wins.length; i++) { wins[i].style.display = 'none'; }
+                var fullHTML = doctype + '\n' + clonedHtml.outerHTML;
+                var blob = new Blob([fullHTML], { type: 'text/html;charset=utf-8' });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                var timestamp = new Date().toISOString().slice(0,10);
+                a.href = url;
+                a.download = 'zhouyawen_portfolio_' + timestamp + '.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+                var sizeMB = (blob.size / 1024 / 1024).toFixed(1);
+                alert('保存成功！文件大小约 ' + sizeMB + ' MB，已开始下载。');
+            } catch (e) {
+                alert('保存失败: ' + e.name + ' - ' + e.message + '\n\n如果文件过大，请减少上传图片数量或压缩图片后再试。');
+            }
+        }
+</script>
+
+</body></html>
