@@ -128,11 +128,25 @@
             if (window.supabase && window.supabase.createClient) {
                 supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
                 useCloud = true;
-                console.log('Supabase 云端留言板已连接');
+                console.log('✅ Supabase 云端留言板已连接');
+                // 测试连接
+                supabaseClient.from('messages').select('id', { count: 'exact', head: true }).then(function(res) {
+                    if (res.error) {
+                        console.warn('⚠️ Supabase 连接测试失败:', res.error.message);
+                    } else {
+                        console.log('✅ Supabase 连接测试成功');
+                    }
+                }).catch(function(e) {
+                    console.warn('⚠️ Supabase 连接测试异常:', e);
+                });
             } else {
-                console.warn('Supabase SDK 未加载，使用本地存储模式');
+                console.warn('⚠️ Supabase SDK 未加载（window.supabase 不存在），使用本地存储模式');
+                console.warn('   可能原因: 1. assets/supabase.min.js 文件不存在 2. 通过 file:// 协议直接打开 HTML 3. SDK 文件损坏');
             }
-        } catch(e) { console.warn('Supabase init failed', e); }
+        } catch(e) {
+            console.warn('⚠️ Supabase 初始化异常:', e);
+            useCloud = false;
+        }
 
         async function getMessages() {
             if (useCloud && supabaseClient) {
@@ -690,11 +704,25 @@
             if (window.supabase && window.supabase.createClient) {
                 supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
                 useCloud = true;
-                console.log('Supabase 云端留言板已连接');
+                console.log('✅ Supabase 云端留言板已连接');
+                // 测试连接
+                supabaseClient.from('messages').select('id', { count: 'exact', head: true }).then(function(res) {
+                    if (res.error) {
+                        console.warn('⚠️ Supabase 连接测试失败:', res.error.message);
+                    } else {
+                        console.log('✅ Supabase 连接测试成功');
+                    }
+                }).catch(function(e) {
+                    console.warn('⚠️ Supabase 连接测试异常:', e);
+                });
             } else {
-                console.warn('Supabase SDK 未加载，使用本地存储模式');
+                console.warn('⚠️ Supabase SDK 未加载（window.supabase 不存在），使用本地存储模式');
+                console.warn('   可能原因: 1. assets/supabase.min.js 文件不存在 2. 通过 file:// 协议直接打开 HTML 3. SDK 文件损坏');
             }
-        } catch(e) { console.warn('Supabase init failed', e); }
+        } catch(e) {
+            console.warn('⚠️ Supabase 初始化异常:', e);
+            useCloud = false;
+        }
 
         async function getMessages() {
             if (useCloud && supabaseClient) {
@@ -3107,11 +3135,25 @@
             if (window.supabase && window.supabase.createClient) {
                 supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
                 useCloud = true;
-                console.log('Supabase 云端留言板已连接');
+                console.log('✅ Supabase 云端留言板已连接');
+                // 测试连接
+                supabaseClient.from('messages').select('id', { count: 'exact', head: true }).then(function(res) {
+                    if (res.error) {
+                        console.warn('⚠️ Supabase 连接测试失败:', res.error.message);
+                    } else {
+                        console.log('✅ Supabase 连接测试成功');
+                    }
+                }).catch(function(e) {
+                    console.warn('⚠️ Supabase 连接测试异常:', e);
+                });
             } else {
-                console.warn('Supabase SDK 未加载，使用本地存储模式');
+                console.warn('⚠️ Supabase SDK 未加载（window.supabase 不存在），使用本地存储模式');
+                console.warn('   可能原因: 1. assets/supabase.min.js 文件不存在 2. 通过 file:// 协议直接打开 HTML 3. SDK 文件损坏');
             }
-        } catch(e) { console.warn('Supabase init failed', e); }
+        } catch(e) {
+            console.warn('⚠️ Supabase 初始化异常:', e);
+            useCloud = false;
+        }
 
         async function getMessages() {
             if (useCloud && supabaseClient) {
@@ -3642,11 +3684,25 @@
             if (window.supabase && window.supabase.createClient) {
                 supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
                 useCloud = true;
-                console.log('Supabase 云端留言板已连接');
+                console.log('✅ Supabase 云端留言板已连接');
+                // 测试连接
+                supabaseClient.from('messages').select('id', { count: 'exact', head: true }).then(function(res) {
+                    if (res.error) {
+                        console.warn('⚠️ Supabase 连接测试失败:', res.error.message);
+                    } else {
+                        console.log('✅ Supabase 连接测试成功');
+                    }
+                }).catch(function(e) {
+                    console.warn('⚠️ Supabase 连接测试异常:', e);
+                });
             } else {
-                console.warn('Supabase SDK 未加载，使用本地存储模式');
+                console.warn('⚠️ Supabase SDK 未加载（window.supabase 不存在），使用本地存储模式');
+                console.warn('   可能原因: 1. assets/supabase.min.js 文件不存在 2. 通过 file:// 协议直接打开 HTML 3. SDK 文件损坏');
             }
-        } catch(e) { console.warn('Supabase init failed', e); }
+        } catch(e) {
+            console.warn('⚠️ Supabase 初始化异常:', e);
+            useCloud = false;
+        }
 
         async function getMessages() {
             if (useCloud && supabaseClient) {
