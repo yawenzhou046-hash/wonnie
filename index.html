@@ -168,14 +168,14 @@
                         .from('messages')
                         .insert([{ text: text, time: timeStr }]);
                     if (error) {
-                        console.warn('云端发送失败，降级到本地', error);
+                        alert('云端发送失败: ' + error.message + '\\n\\n错误代码: ' + (error.code || 'unknown') + '\\n详情: ' + (error.details || 'none') + '\\n\\n已降级到本地存储'); console.warn('云端发送失败', error);
                         saveLocalMessage(text, timeStr);
                     }
                     playAudio('beep');
                     await renderMessages();
                     return;
                 } catch(e) {
-                    console.warn('云端发送异常，降级到本地', e);
+                    alert('云端发送异常: ' + e.message + '\n已降级到本地存储'); console.warn('云端发送异常', e);
                 }
             }
             // 降级到本地存储
@@ -193,6 +193,12 @@
         async function renderMessages() {
             const list = document.getElementById('msg-list');
             if (!list) return;
+            // 显示当前模式
+            const modeEl = document.getElementById('msg-mode');
+            if (modeEl) {
+                modeEl.textContent = useCloud ? '☁️ 云端模式' : '💾 本地模式';
+                modeEl.style.color = useCloud ? '#00ff66' : '#ffaa00';
+            }
             list.innerHTML = '<div class="msg-empty">加载中...</div>';
             const msgs = await getMessages();
             if (msgs.length === 0) {
@@ -724,14 +730,14 @@
                         .from('messages')
                         .insert([{ text: text, time: timeStr }]);
                     if (error) {
-                        console.warn('云端发送失败，降级到本地', error);
+                        alert('云端发送失败: ' + error.message + '\\n\\n错误代码: ' + (error.code || 'unknown') + '\\n详情: ' + (error.details || 'none') + '\\n\\n已降级到本地存储'); console.warn('云端发送失败', error);
                         saveLocalMessage(text, timeStr);
                     }
                     playAudio('beep');
                     await renderMessages();
                     return;
                 } catch(e) {
-                    console.warn('云端发送异常，降级到本地', e);
+                    alert('云端发送异常: ' + e.message + '\n已降级到本地存储'); console.warn('云端发送异常', e);
                 }
             }
             // 降级到本地存储
@@ -749,6 +755,12 @@
         async function renderMessages() {
             const list = document.getElementById('msg-list');
             if (!list) return;
+            // 显示当前模式
+            const modeEl = document.getElementById('msg-mode');
+            if (modeEl) {
+                modeEl.textContent = useCloud ? '☁️ 云端模式' : '💾 本地模式';
+                modeEl.style.color = useCloud ? '#00ff66' : '#ffaa00';
+            }
             list.innerHTML = '<div class="msg-empty">加载中...</div>';
             const msgs = await getMessages();
             if (msgs.length === 0) {
@@ -1943,7 +1955,7 @@
             <div class="flex items-center justify-between px-3 py-2 bg-cyber-titlebar border-b border-cyber-panelBorder cursor-move" data-drag-handle>
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-comments text-cyber-green text-xs"></i>
-                    <span class="text-[11px] font-bold text-cyber-text tracking-wider">匿名留言板 // ANONYMOUS BOARD</span>
+                    <span class="text-[11px] font-bold text-cyber-text tracking-wider">匿名留言板 // ANONYMOUS BOARD <span id="msg-mode" style="font-size:9px;opacity:0.6;margin-left:8px;"></span></span>
                 </div>
                 <div class="flex items-center gap-1.5">
                     <button onclick="minimizeWindow('win-paint')" class="w-3.5 h-3.5 rounded-full bg-yellow-500/80 hover:bg-yellow-400 flex items-center justify-center text-[8px] text-black"><i class="fa-solid fa-minus"></i></button>
@@ -3135,14 +3147,14 @@
                         .from('messages')
                         .insert([{ text: text, time: timeStr }]);
                     if (error) {
-                        console.warn('云端发送失败，降级到本地', error);
+                        alert('云端发送失败: ' + error.message + '\\n\\n错误代码: ' + (error.code || 'unknown') + '\\n详情: ' + (error.details || 'none') + '\\n\\n已降级到本地存储'); console.warn('云端发送失败', error);
                         saveLocalMessage(text, timeStr);
                     }
                     playAudio('beep');
                     await renderMessages();
                     return;
                 } catch(e) {
-                    console.warn('云端发送异常，降级到本地', e);
+                    alert('云端发送异常: ' + e.message + '\n已降级到本地存储'); console.warn('云端发送异常', e);
                 }
             }
             // 降级到本地存储
@@ -3160,6 +3172,12 @@
         async function renderMessages() {
             const list = document.getElementById('msg-list');
             if (!list) return;
+            // 显示当前模式
+            const modeEl = document.getElementById('msg-mode');
+            if (modeEl) {
+                modeEl.textContent = useCloud ? '☁️ 云端模式' : '💾 本地模式';
+                modeEl.style.color = useCloud ? '#00ff66' : '#ffaa00';
+            }
             list.innerHTML = '<div class="msg-empty">加载中...</div>';
             const msgs = await getMessages();
             if (msgs.length === 0) {
@@ -3664,14 +3682,14 @@
                         .from('messages')
                         .insert([{ text: text, time: timeStr }]);
                     if (error) {
-                        console.warn('云端发送失败，降级到本地', error);
+                        alert('云端发送失败: ' + error.message + '\\n\\n错误代码: ' + (error.code || 'unknown') + '\\n详情: ' + (error.details || 'none') + '\\n\\n已降级到本地存储'); console.warn('云端发送失败', error);
                         saveLocalMessage(text, timeStr);
                     }
                     playAudio('beep');
                     await renderMessages();
                     return;
                 } catch(e) {
-                    console.warn('云端发送异常，降级到本地', e);
+                    alert('云端发送异常: ' + e.message + '\n已降级到本地存储'); console.warn('云端发送异常', e);
                 }
             }
             // 降级到本地存储
@@ -3689,6 +3707,12 @@
         async function renderMessages() {
             const list = document.getElementById('msg-list');
             if (!list) return;
+            // 显示当前模式
+            const modeEl = document.getElementById('msg-mode');
+            if (modeEl) {
+                modeEl.textContent = useCloud ? '☁️ 云端模式' : '💾 本地模式';
+                modeEl.style.color = useCloud ? '#00ff66' : '#ffaa00';
+            }
             list.innerHTML = '<div class="msg-empty">加载中...</div>';
             const msgs = await getMessages();
             if (msgs.length === 0) {
