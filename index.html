@@ -2259,6 +2259,20 @@
             const res = document.createElement('div');
             res.className = 'text-cyber-dimText mb-2';
 
+            const DEV_PASS = atob('MTYxNjE2');
+            if (cmd === DEV_PASS) {
+                toggleDevMode();
+                if (isDevMode()) {
+                    res.innerHTML = '<span class="text-cyber-green">>> DEV MODE ACTIVATED <<</span><br>开发者模式已开启，可上传/管理作品图片。';
+                } else {
+                    res.innerHTML = '<span class="text-red-400">>> DEV MODE DEACTIVATED <<</span><br>开发者模式已关闭。';
+                }
+                output.appendChild(res);
+                output.scrollTop = output.scrollHeight;
+                input.value = '';
+                playAudio('beep');
+                return;
+            }
             switch (cmd) {
                 case 'help':
                     res.innerHTML = `可用指令:<br>- <span class="text-cyber-green">works</span> : 打开周雅文作品集<br>- <span class="text-cyber-green">about</span> : 查看个人简历与三大能力<br>- <span class="text-cyber-green">contact</span> : 显示周雅文联系方式<br>- <span class="text-cyber-green">clear</span> : 清屏`;
@@ -2279,14 +2293,7 @@
                     output.innerHTML = '';
                     input.value = '';
                     return;
-                case '161616':
-                    toggleDevMode();
-                    if (isDevMode()) {
-                        res.innerHTML = '<span class="text-cyber-green">>> DEV MODE ACTIVATED <<</span><br>开发者模式已开启，可上传/管理作品图片。';
-                    } else {
-                        res.innerHTML = '<span class="text-red-400">>> DEV MODE DEACTIVATED <<</span><br>开发者模式已关闭。';
-                    }
-                    break;
+
                 default:
                     res.innerHTML = `<span class="text-red-400">未知指令 '${cmd}'. 请输入 'help'。</span>`;
             }
