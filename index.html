@@ -34,7 +34,14 @@
         function getWorkImages(galleryId) {
             try {
                 const data = localStorage.getItem('portfolio_work_' + galleryId);
-                return data ? JSON.parse(data) : [];
+                if (data) return JSON.parse(data);
+                // 默认图片
+                const defaults = {
+                    "work-gallery-3": ["images/image_05.jpg","images/image_06.jpg","images/image_07.jpg"],
+                    "work-gallery-4": ["images/image_08.jpg","images/image_09.jpg","images/image_10.jpg","images/image_11.jpg","images/image_12.jpg"],
+                    "work-gallery-5": ["images/image_12.jpg","images/image_13.jpg","images/image_14.jpg","images/image_15.jpg","images/image_16.jpg","images/image_17.jpg","images/image_18.jpg"]
+                };
+                return defaults[galleryId] || [];
             } catch(e) { return []; }
         }
         function saveWorkImages(galleryId, images) {
@@ -369,8 +376,9 @@
   }
   function greet(){
     if (hasGreeted) return; hasGreeted = true;
-    setState("wave"); say("welcome to my world!", 2800);
-    setTimeout(()=>{ setState("idle"); startBob(); scheduleNextIdle(); }, 3000);
+    setState("wave"); say("hi~ welcome to my world ✨", 3000);
+    setTimeout(()=>{ say("双击我可以抽取今日运势哦~", 3500); }, 3200);
+    setTimeout(()=>{ setState("idle"); startBob(); scheduleNextIdle(); }, 7000);
   }
 
   const POSES = ["idle","chin","wave"];
@@ -473,7 +481,7 @@
     pet.addEventListener("dblclick", e=>{ e.preventDefault(); openTarot(); });
   }
 
-  pet.style.left="220px"; pet.style.bottom="20px"; pet.style.top="auto";
+  pet.style.right="20px"; pet.style.bottom="20px"; pet.style.left="auto"; pet.style.top="auto";
   enableDrag(); startBob();
   setTimeout(greet, 2600);
 })();
@@ -534,7 +542,14 @@
         function getWorkImages(galleryId) {
             try {
                 const data = localStorage.getItem('portfolio_work_' + galleryId);
-                return data ? JSON.parse(data) : [];
+                if (data) return JSON.parse(data);
+                // 默认图片
+                const defaults = {
+                    "work-gallery-3": ["images/image_05.jpg","images/image_06.jpg","images/image_07.jpg"],
+                    "work-gallery-4": ["images/image_08.jpg","images/image_09.jpg","images/image_10.jpg","images/image_11.jpg","images/image_12.jpg"],
+                    "work-gallery-5": ["images/image_12.jpg","images/image_13.jpg","images/image_14.jpg","images/image_15.jpg","images/image_16.jpg","images/image_17.jpg","images/image_18.jpg"]
+                };
+                return defaults[galleryId] || [];
             } catch(e) { return []; }
         }
         function saveWorkImages(galleryId, images) {
@@ -869,8 +884,9 @@
   }
   function greet(){
     if (hasGreeted) return; hasGreeted = true;
-    setState("wave"); say("welcome to my world!", 2800);
-    setTimeout(()=>{ setState("idle"); startBob(); scheduleNextIdle(); }, 3000);
+    setState("wave"); say("hi~ welcome to my world ✨", 3000);
+    setTimeout(()=>{ say("双击我可以抽取今日运势哦~", 3500); }, 3200);
+    setTimeout(()=>{ setState("idle"); startBob(); scheduleNextIdle(); }, 7000);
   }
 
   const POSES = ["idle","chin","wave"];
@@ -973,7 +989,7 @@
     pet.addEventListener("dblclick", e=>{ e.preventDefault(); openTarot(); });
   }
 
-  pet.style.left="220px"; pet.style.bottom="20px"; pet.style.top="auto";
+  pet.style.right="20px"; pet.style.bottom="20px"; pet.style.left="auto"; pet.style.top="auto";
   enableDrag(); startBob();
   setTimeout(greet, 2600);
 })();
@@ -2841,8 +2857,16 @@
 
             window.addEventListener('resize', resizeBg);
             
+            // 清除错误的作品图片缓存，使用默认图片
+            ["work-gallery-3","work-gallery-4","work-gallery-5"].forEach(function(id) {
+                localStorage.removeItem('portfolio_work_' + id);
+            });
+            // 先隐藏所有窗口
+            document.querySelectorAll('.draggable-window').forEach(function(w) { w.style.display = 'none'; });
             // Auto dismiss boot sequence after 2.2 seconds
             setTimeout(dismissBoot, 2200);
+            // 启动后自动弹出联系方式窗口
+            setTimeout(function() { openWindow('win-contact'); }, 2600);
         };
     
         // ============================================================
@@ -2872,7 +2896,14 @@
         function getWorkImages(galleryId) {
             try {
                 const data = localStorage.getItem('portfolio_work_' + galleryId);
-                return data ? JSON.parse(data) : [];
+                if (data) return JSON.parse(data);
+                // 默认图片
+                const defaults = {
+                    "work-gallery-3": ["images/image_05.jpg","images/image_06.jpg","images/image_07.jpg"],
+                    "work-gallery-4": ["images/image_08.jpg","images/image_09.jpg","images/image_10.jpg","images/image_11.jpg","images/image_12.jpg"],
+                    "work-gallery-5": ["images/image_12.jpg","images/image_13.jpg","images/image_14.jpg","images/image_15.jpg","images/image_16.jpg","images/image_17.jpg","images/image_18.jpg"]
+                };
+                return defaults[galleryId] || [];
             } catch(e) { return []; }
         }
         function saveWorkImages(galleryId, images) {
@@ -3207,8 +3238,9 @@
   }
   function greet(){
     if (hasGreeted) return; hasGreeted = true;
-    setState("wave"); say("welcome to my world!", 2800);
-    setTimeout(()=>{ setState("idle"); startBob(); scheduleNextIdle(); }, 3000);
+    setState("wave"); say("hi~ welcome to my world ✨", 3000);
+    setTimeout(()=>{ say("双击我可以抽取今日运势哦~", 3500); }, 3200);
+    setTimeout(()=>{ setState("idle"); startBob(); scheduleNextIdle(); }, 7000);
   }
 
   const POSES = ["idle","chin","wave"];
@@ -3311,7 +3343,7 @@
     pet.addEventListener("dblclick", e=>{ e.preventDefault(); openTarot(); });
   }
 
-  pet.style.left="220px"; pet.style.bottom="20px"; pet.style.top="auto";
+  pet.style.right="20px"; pet.style.bottom="20px"; pet.style.left="auto"; pet.style.top="auto";
   enableDrag(); startBob();
   setTimeout(greet, 2600);
 })();
@@ -3345,7 +3377,14 @@
         function getWorkImages(galleryId) {
             try {
                 const data = localStorage.getItem('portfolio_work_' + galleryId);
-                return data ? JSON.parse(data) : [];
+                if (data) return JSON.parse(data);
+                // 默认图片
+                const defaults = {
+                    "work-gallery-3": ["images/image_05.jpg","images/image_06.jpg","images/image_07.jpg"],
+                    "work-gallery-4": ["images/image_08.jpg","images/image_09.jpg","images/image_10.jpg","images/image_11.jpg","images/image_12.jpg"],
+                    "work-gallery-5": ["images/image_12.jpg","images/image_13.jpg","images/image_14.jpg","images/image_15.jpg","images/image_16.jpg","images/image_17.jpg","images/image_18.jpg"]
+                };
+                return defaults[galleryId] || [];
             } catch(e) { return []; }
         }
         function saveWorkImages(galleryId, images) {
@@ -3680,8 +3719,9 @@
   }
   function greet(){
     if (hasGreeted) return; hasGreeted = true;
-    setState("wave"); say("welcome to my world!", 2800);
-    setTimeout(()=>{ setState("idle"); startBob(); scheduleNextIdle(); }, 3000);
+    setState("wave"); say("hi~ welcome to my world ✨", 3000);
+    setTimeout(()=>{ say("双击我可以抽取今日运势哦~", 3500); }, 3200);
+    setTimeout(()=>{ setState("idle"); startBob(); scheduleNextIdle(); }, 7000);
   }
 
   const POSES = ["idle","chin","wave"];
@@ -3784,7 +3824,7 @@
     pet.addEventListener("dblclick", e=>{ e.preventDefault(); openTarot(); });
   }
 
-  pet.style.left="220px"; pet.style.bottom="20px"; pet.style.top="auto";
+  pet.style.right="20px"; pet.style.bottom="20px"; pet.style.left="auto"; pet.style.top="auto";
   enableDrag(); startBob();
   setTimeout(greet, 2600);
 })();
