@@ -119,43 +119,91 @@
             }
         }
 
-        function getMessages() {
+        // ===== Supabase 初始化 =====
+        var supabaseUrl = 'https://xoqniqsfnpupmyaiqlgu.supabase.co';
+        var supabaseKey = 'sb_publishable_7kuGB6fYC8F3auczyOPXFw_grzdjqYM';
+        var supabaseClient = null;
+        var useCloud = false;
+        try {
+            if (window.supabase && window.supabase.createClient) {
+                supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+                useCloud = true;
+                console.log('Supabase 云端留言板已连接');
+            } else {
+                console.warn('Supabase SDK 未加载，使用本地存储模式');
+            }
+        } catch(e) { console.warn('Supabase init failed', e); }
+
+        async function getMessages() {
+            if (useCloud && supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('messages')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+                        .limit(100);
+                    if (error) { console.warn('Supabase read error', error); return getLocalMessages(); }
+                    return data || [];
+                } catch(e) { console.warn('Supabase read failed', e); return getLocalMessages(); }
+            }
+            return getLocalMessages();
+        }
+        function getLocalMessages() {
             try {
                 const data = localStorage.getItem('portfolio_messages');
                 return data ? JSON.parse(data) : [];
             } catch(e) { return []; }
         }
-        function saveMessages(msgs) {
-            localStorage.setItem('portfolio_messages', JSON.stringify(msgs));
-        }
-        function sendMessage() {
+
+        async function sendMessage() {
             const input = document.getElementById('msg-input');
             const text = input.value.trim();
             if (!text) return;
-            const msgs = getMessages();
-            msgs.unshift({
-                text: text,
-                time: new Date().toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}),
-                id: Date.now()
-            });
-            if (msgs.length > 100) msgs = msgs.slice(0, 100);
-            saveMessages(msgs);
             input.value = '';
-            renderMessages();
+            const timeStr = new Date().toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+
+            if (useCloud && supabaseClient) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('messages')
+                        .insert([{ text: text, time: timeStr }]);
+                    if (error) {
+                        console.warn('云端发送失败，降级到本地', error);
+                        saveLocalMessage(text, timeStr);
+                    }
+                    playAudio('beep');
+                    await renderMessages();
+                    return;
+                } catch(e) {
+                    console.warn('云端发送异常，降级到本地', e);
+                }
+            }
+            // 降级到本地存储
+            saveLocalMessage(text, timeStr);
             playAudio('beep');
+            await renderMessages();
         }
-        function renderMessages() {
+        function saveLocalMessage(text, timeStr) {
+            const msgs = getLocalMessages();
+            msgs.unshift({ text: text, time: timeStr, id: Date.now() });
+            if (msgs.length > 100) msgs = msgs.slice(0, 100);
+            localStorage.setItem('portfolio_messages', JSON.stringify(msgs));
+        }
+
+        async function renderMessages() {
             const list = document.getElementById('msg-list');
             if (!list) return;
-            const msgs = getMessages();
+            list.innerHTML = '<div class="msg-empty">加载中...</div>';
+            const msgs = await getMessages();
             if (msgs.length === 0) {
                 list.innerHTML = '<div class="msg-empty">还没有留言，来留下第一句话吧...</div>';
                 return;
             }
             list.innerHTML = msgs.map(function(m) {
-                return '<div class="msg-item"><div class="msg-text">' + escapeHtml(m.text) + '</div><div class="msg-meta">匿名用户 · ' + m.time + '</div></div>';
+                return '<div class="msg-item"><div class="msg-text">' + escapeHtml(m.text) + '</div><div class="msg-meta">匿名用户 · ' + (m.time || '') + '</div></div>';
             }).join('');
         }
+
         function escapeHtml(str) {
             const div = document.createElement('div');
             div.textContent = str;
@@ -215,7 +263,7 @@
         })();
 
         window.addEventListener('load', function() {
-            setTimeout(function() { renderAllWorks(); renderMessages(); }, 100);
+            setTimeout(function() { renderAllWorks(); renderMessages(); }, 500);
         });
     
 
@@ -627,43 +675,91 @@
             }
         }
 
-        function getMessages() {
+        // ===== Supabase 初始化 =====
+        var supabaseUrl = 'https://xoqniqsfnpupmyaiqlgu.supabase.co';
+        var supabaseKey = 'sb_publishable_7kuGB6fYC8F3auczyOPXFw_grzdjqYM';
+        var supabaseClient = null;
+        var useCloud = false;
+        try {
+            if (window.supabase && window.supabase.createClient) {
+                supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+                useCloud = true;
+                console.log('Supabase 云端留言板已连接');
+            } else {
+                console.warn('Supabase SDK 未加载，使用本地存储模式');
+            }
+        } catch(e) { console.warn('Supabase init failed', e); }
+
+        async function getMessages() {
+            if (useCloud && supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('messages')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+                        .limit(100);
+                    if (error) { console.warn('Supabase read error', error); return getLocalMessages(); }
+                    return data || [];
+                } catch(e) { console.warn('Supabase read failed', e); return getLocalMessages(); }
+            }
+            return getLocalMessages();
+        }
+        function getLocalMessages() {
             try {
                 const data = localStorage.getItem('portfolio_messages');
                 return data ? JSON.parse(data) : [];
             } catch(e) { return []; }
         }
-        function saveMessages(msgs) {
-            localStorage.setItem('portfolio_messages', JSON.stringify(msgs));
-        }
-        function sendMessage() {
+
+        async function sendMessage() {
             const input = document.getElementById('msg-input');
             const text = input.value.trim();
             if (!text) return;
-            const msgs = getMessages();
-            msgs.unshift({
-                text: text,
-                time: new Date().toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}),
-                id: Date.now()
-            });
-            if (msgs.length > 100) msgs = msgs.slice(0, 100);
-            saveMessages(msgs);
             input.value = '';
-            renderMessages();
+            const timeStr = new Date().toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+
+            if (useCloud && supabaseClient) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('messages')
+                        .insert([{ text: text, time: timeStr }]);
+                    if (error) {
+                        console.warn('云端发送失败，降级到本地', error);
+                        saveLocalMessage(text, timeStr);
+                    }
+                    playAudio('beep');
+                    await renderMessages();
+                    return;
+                } catch(e) {
+                    console.warn('云端发送异常，降级到本地', e);
+                }
+            }
+            // 降级到本地存储
+            saveLocalMessage(text, timeStr);
             playAudio('beep');
+            await renderMessages();
         }
-        function renderMessages() {
+        function saveLocalMessage(text, timeStr) {
+            const msgs = getLocalMessages();
+            msgs.unshift({ text: text, time: timeStr, id: Date.now() });
+            if (msgs.length > 100) msgs = msgs.slice(0, 100);
+            localStorage.setItem('portfolio_messages', JSON.stringify(msgs));
+        }
+
+        async function renderMessages() {
             const list = document.getElementById('msg-list');
             if (!list) return;
-            const msgs = getMessages();
+            list.innerHTML = '<div class="msg-empty">加载中...</div>';
+            const msgs = await getMessages();
             if (msgs.length === 0) {
                 list.innerHTML = '<div class="msg-empty">还没有留言，来留下第一句话吧...</div>';
                 return;
             }
             list.innerHTML = msgs.map(function(m) {
-                return '<div class="msg-item"><div class="msg-text">' + escapeHtml(m.text) + '</div><div class="msg-meta">匿名用户 · ' + m.time + '</div></div>';
+                return '<div class="msg-item"><div class="msg-text">' + escapeHtml(m.text) + '</div><div class="msg-meta">匿名用户 · ' + (m.time || '') + '</div></div>';
             }).join('');
         }
+
         function escapeHtml(str) {
             const div = document.createElement('div');
             div.textContent = str;
@@ -723,7 +819,7 @@
         })();
 
         window.addEventListener('load', function() {
-            setTimeout(function() { renderAllWorks(); renderMessages(); }, 100);
+            setTimeout(function() { renderAllWorks(); renderMessages(); }, 500);
         });
     
 
@@ -1190,7 +1286,9 @@
         #tarot-panel .pick-btn:hover small { color: #000; }
 
     </style>
-</head>
+
+    <script src="assets/supabase.min.js"></script>
+    </head>
 
 <body class="bg-cyber-bg text-cyber-text font-mono selection:bg-cyber-green selection:text-black h-screen w-screen overflow-hidden relative scanline-active" id="body-tag">
     <canvas id="trail-canvas"></canvas>
@@ -2988,43 +3086,91 @@
             }
         }
 
-        function getMessages() {
+        // ===== Supabase 初始化 =====
+        var supabaseUrl = 'https://xoqniqsfnpupmyaiqlgu.supabase.co';
+        var supabaseKey = 'sb_publishable_7kuGB6fYC8F3auczyOPXFw_grzdjqYM';
+        var supabaseClient = null;
+        var useCloud = false;
+        try {
+            if (window.supabase && window.supabase.createClient) {
+                supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+                useCloud = true;
+                console.log('Supabase 云端留言板已连接');
+            } else {
+                console.warn('Supabase SDK 未加载，使用本地存储模式');
+            }
+        } catch(e) { console.warn('Supabase init failed', e); }
+
+        async function getMessages() {
+            if (useCloud && supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('messages')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+                        .limit(100);
+                    if (error) { console.warn('Supabase read error', error); return getLocalMessages(); }
+                    return data || [];
+                } catch(e) { console.warn('Supabase read failed', e); return getLocalMessages(); }
+            }
+            return getLocalMessages();
+        }
+        function getLocalMessages() {
             try {
                 const data = localStorage.getItem('portfolio_messages');
                 return data ? JSON.parse(data) : [];
             } catch(e) { return []; }
         }
-        function saveMessages(msgs) {
-            localStorage.setItem('portfolio_messages', JSON.stringify(msgs));
-        }
-        function sendMessage() {
+
+        async function sendMessage() {
             const input = document.getElementById('msg-input');
             const text = input.value.trim();
             if (!text) return;
-            const msgs = getMessages();
-            msgs.unshift({
-                text: text,
-                time: new Date().toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}),
-                id: Date.now()
-            });
-            if (msgs.length > 100) msgs = msgs.slice(0, 100);
-            saveMessages(msgs);
             input.value = '';
-            renderMessages();
+            const timeStr = new Date().toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+
+            if (useCloud && supabaseClient) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('messages')
+                        .insert([{ text: text, time: timeStr }]);
+                    if (error) {
+                        console.warn('云端发送失败，降级到本地', error);
+                        saveLocalMessage(text, timeStr);
+                    }
+                    playAudio('beep');
+                    await renderMessages();
+                    return;
+                } catch(e) {
+                    console.warn('云端发送异常，降级到本地', e);
+                }
+            }
+            // 降级到本地存储
+            saveLocalMessage(text, timeStr);
             playAudio('beep');
+            await renderMessages();
         }
-        function renderMessages() {
+        function saveLocalMessage(text, timeStr) {
+            const msgs = getLocalMessages();
+            msgs.unshift({ text: text, time: timeStr, id: Date.now() });
+            if (msgs.length > 100) msgs = msgs.slice(0, 100);
+            localStorage.setItem('portfolio_messages', JSON.stringify(msgs));
+        }
+
+        async function renderMessages() {
             const list = document.getElementById('msg-list');
             if (!list) return;
-            const msgs = getMessages();
+            list.innerHTML = '<div class="msg-empty">加载中...</div>';
+            const msgs = await getMessages();
             if (msgs.length === 0) {
                 list.innerHTML = '<div class="msg-empty">还没有留言，来留下第一句话吧...</div>';
                 return;
             }
             list.innerHTML = msgs.map(function(m) {
-                return '<div class="msg-item"><div class="msg-text">' + escapeHtml(m.text) + '</div><div class="msg-meta">匿名用户 · ' + m.time + '</div></div>';
+                return '<div class="msg-item"><div class="msg-text">' + escapeHtml(m.text) + '</div><div class="msg-meta">匿名用户 · ' + (m.time || '') + '</div></div>';
             }).join('');
         }
+
         function escapeHtml(str) {
             const div = document.createElement('div');
             div.textContent = str;
@@ -3084,7 +3230,7 @@
         })();
 
         window.addEventListener('load', function() {
-            setTimeout(function() { renderAllWorks(); renderMessages(); }, 100);
+            setTimeout(function() { renderAllWorks(); renderMessages(); }, 500);
         });
     
 
@@ -3469,43 +3615,91 @@
             }
         }
 
-        function getMessages() {
+        // ===== Supabase 初始化 =====
+        var supabaseUrl = 'https://xoqniqsfnpupmyaiqlgu.supabase.co';
+        var supabaseKey = 'sb_publishable_7kuGB6fYC8F3auczyOPXFw_grzdjqYM';
+        var supabaseClient = null;
+        var useCloud = false;
+        try {
+            if (window.supabase && window.supabase.createClient) {
+                supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+                useCloud = true;
+                console.log('Supabase 云端留言板已连接');
+            } else {
+                console.warn('Supabase SDK 未加载，使用本地存储模式');
+            }
+        } catch(e) { console.warn('Supabase init failed', e); }
+
+        async function getMessages() {
+            if (useCloud && supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('messages')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+                        .limit(100);
+                    if (error) { console.warn('Supabase read error', error); return getLocalMessages(); }
+                    return data || [];
+                } catch(e) { console.warn('Supabase read failed', e); return getLocalMessages(); }
+            }
+            return getLocalMessages();
+        }
+        function getLocalMessages() {
             try {
                 const data = localStorage.getItem('portfolio_messages');
                 return data ? JSON.parse(data) : [];
             } catch(e) { return []; }
         }
-        function saveMessages(msgs) {
-            localStorage.setItem('portfolio_messages', JSON.stringify(msgs));
-        }
-        function sendMessage() {
+
+        async function sendMessage() {
             const input = document.getElementById('msg-input');
             const text = input.value.trim();
             if (!text) return;
-            const msgs = getMessages();
-            msgs.unshift({
-                text: text,
-                time: new Date().toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}),
-                id: Date.now()
-            });
-            if (msgs.length > 100) msgs = msgs.slice(0, 100);
-            saveMessages(msgs);
             input.value = '';
-            renderMessages();
+            const timeStr = new Date().toLocaleString('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+
+            if (useCloud && supabaseClient) {
+                try {
+                    const { error } = await supabaseClient
+                        .from('messages')
+                        .insert([{ text: text, time: timeStr }]);
+                    if (error) {
+                        console.warn('云端发送失败，降级到本地', error);
+                        saveLocalMessage(text, timeStr);
+                    }
+                    playAudio('beep');
+                    await renderMessages();
+                    return;
+                } catch(e) {
+                    console.warn('云端发送异常，降级到本地', e);
+                }
+            }
+            // 降级到本地存储
+            saveLocalMessage(text, timeStr);
             playAudio('beep');
+            await renderMessages();
         }
-        function renderMessages() {
+        function saveLocalMessage(text, timeStr) {
+            const msgs = getLocalMessages();
+            msgs.unshift({ text: text, time: timeStr, id: Date.now() });
+            if (msgs.length > 100) msgs = msgs.slice(0, 100);
+            localStorage.setItem('portfolio_messages', JSON.stringify(msgs));
+        }
+
+        async function renderMessages() {
             const list = document.getElementById('msg-list');
             if (!list) return;
-            const msgs = getMessages();
+            list.innerHTML = '<div class="msg-empty">加载中...</div>';
+            const msgs = await getMessages();
             if (msgs.length === 0) {
                 list.innerHTML = '<div class="msg-empty">还没有留言，来留下第一句话吧...</div>';
                 return;
             }
             list.innerHTML = msgs.map(function(m) {
-                return '<div class="msg-item"><div class="msg-text">' + escapeHtml(m.text) + '</div><div class="msg-meta">匿名用户 · ' + m.time + '</div></div>';
+                return '<div class="msg-item"><div class="msg-text">' + escapeHtml(m.text) + '</div><div class="msg-meta">匿名用户 · ' + (m.time || '') + '</div></div>';
             }).join('');
         }
+
         function escapeHtml(str) {
             const div = document.createElement('div');
             div.textContent = str;
@@ -3565,7 +3759,7 @@
         })();
 
         window.addEventListener('load', function() {
-            setTimeout(function() { renderAllWorks(); renderMessages(); }, 100);
+            setTimeout(function() { renderAllWorks(); renderMessages(); }, 500);
         });
     
 
