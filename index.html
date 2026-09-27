@@ -3003,9 +3003,9 @@
 
             window.addEventListener('resize', resizeBg);
             
-            // 清除错误的作品图片缓存，使用默认图片
-            ["work-gallery-3","work-gallery-4","work-gallery-5"].forEach(function(id) {
-                localStorage.removeItem('portfolio_work_' + id);
+            // 清除所有作品图片缓存，强制使用默认图片
+            Object.keys(localStorage).filter(function(k) { return k.indexOf('portfolio_work_') === 0; }).forEach(function(k) {
+                localStorage.removeItem(k);
             });
             // 先隐藏所有窗口
             document.querySelectorAll('.draggable-window').forEach(function(w) { w.style.display = 'none'; });
