@@ -2210,6 +2210,10 @@
             screen.style.transition = 'opacity 0.4s ease';
             setTimeout(() => { screen.style.display = 'none'; }, 400);
             playAudio('beep');
+            // 记录已初始化，刷新后不再显示启动画面
+            try { localStorage.setItem('portfolio_booted', '1'); } catch(e) {}
+            // 进入主界面后自动弹出联系方式窗口
+            setTimeout(function() { openWindow('win-contact'); }, 500);
         }
 
         // Draggable Window Manager System
@@ -3009,10 +3013,19 @@
             });
             // 先隐藏所有窗口
             document.querySelectorAll('.draggable-window').forEach(function(w) { w.style.display = 'none'; });
-            // Auto dismiss boot sequence after 2.2 seconds
-            setTimeout(dismissBoot, 2200);
-            // 启动后自动弹出联系方式窗口
-            setTimeout(function() { openWindow('win-contact'); }, 2600);
+            // 检查是否已初始化过，已初始化则跳过启动画面
+            var alreadyBooted = false;
+            try { alreadyBooted = localStorage.getItem('portfolio_booted') === '1'; } catch(e) {}
+            if (alreadyBooted) {
+                // 已初始化，直接隐藏启动画面并进入主界面
+                var bootScreen = document.getElementById('boot-screen');
+                if (bootScreen) bootScreen.style.display = 'none';
+                openWindow('win-contact');
+            } else {
+                // 未初始化，显示启动画面，等用户点击 ENTER
+                // 启动画面默认就是显示的，不需要额外操作
+                // 用户点击 ENTER 后会调用 dismissBoot()，然后打开联系方式窗口
+            }
         };
     
         // ============================================================
